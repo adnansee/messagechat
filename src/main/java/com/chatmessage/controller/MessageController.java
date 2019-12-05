@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
 
-    //SEND MESSAGES    NOT WORKING WITH AUTOMATIC DATE/TIME
+    //SEND MESSAGES
     @RequestMapping(method = RequestMethod.POST, value = "/sendmsg")
     public ResponseEntity<Message> sendMessage(@RequestBody Message message) {
         message.setLocalDateTime(LocalDateTime.now());
@@ -50,7 +49,10 @@ public class MessageController {
 
 
     //CALCULATE EXPECTED FOR THE DAY
+    //get current time and get message count since 00:00. Average it till the next 00:00
+
     //CALCULATE EXPECTED FOR THE WEEK
+    //get current time and get message count since 00:00. Average it till 7 days since 00:00 today.
 
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteall")
