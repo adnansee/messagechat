@@ -13,10 +13,10 @@ public interface MessageRepository extends MongoRepository<Message, String> {
 
 
     //FIND ALL MESSAGES INCOMING
-    public List<Message> findAllByReceiverIs(Users users);
-
+   // List<Message> findAllByReceiverIs(Users users);
+    List<Message> findAllByReceiver_Id(String users);
     //FIND ALL MESSAGES SENT
-    public List<Message> findAllBySenderIs(Users users);
+    List<Message> findAllBySender_Id(String users);
 
     //READ MESSAGE
 

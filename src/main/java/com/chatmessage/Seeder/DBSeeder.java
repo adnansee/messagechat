@@ -39,7 +39,7 @@ public class DBSeeder {/*implements CommandLineRunner{
         Message m1 = new Message();
         m1.setContent("HELLO ricky");
         m1.setSender(user1);
-        m1.setReciever(user2);
+        m1.setReceiver(user2);
         m1.setLocalDateTime(LocalDateTime.now());
         m1.setSubject("hello subject");
 
