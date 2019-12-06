@@ -5,9 +5,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.stereotype.Component;
 
-import java.util.List;
+
+
+/** USER CLASS
+ * Uses Lombok
+ */
 
 
 @Document
@@ -16,8 +19,8 @@ public class Users {
 
     @Id
     private String id;
-    private String name;
     @Indexed(direction = IndexDirection.ASCENDING)
-    private List<Message> messagesReceived;
-    private List<Message> messagesSent;
+    private String name;
+
+
 }
