@@ -18,6 +18,6 @@ public class Users {
     private String id;
     private String name;
     @Indexed(direction = IndexDirection.ASCENDING)
-    private List<Message> messagesRecieved;
+    private List<Message> messagesReceived;
     private List<Message> messagesSent;
 }

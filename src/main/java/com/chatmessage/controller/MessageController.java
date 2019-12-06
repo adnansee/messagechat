@@ -26,10 +26,21 @@ public class MessageController {
     }
 
 
+    //SEND MESSAGES MANY
+    @RequestMapping(method = RequestMethod.POST, value = "/sendmsgs")
+    public ResponseEntity<List<Message>> sendMultipleMessage(@RequestBody List<Message> messages) {
+        for (Message message :messages) {
+            message.setLocalDateTime(LocalDateTime.now());
+        }
+        messageRepository.saveAll(messages);
+        return new ResponseEntity<>(messages, HttpStatus.CREATED);
+    }
+
+
     //LIST INCOMING MESSAGES
     @RequestMapping(method = RequestMethod.GET, value = "read/myrecieved/{users}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable("users") Users users) {
-        List<Message> messages = messageRepository.findAllByRecieverIs(users);
+        List<Message> messages = messageRepository.findAllByReceiverIs(users);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 

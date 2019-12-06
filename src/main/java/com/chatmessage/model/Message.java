@@ -21,7 +21,7 @@ public class Message {
     private String id;
     private String subject;
     private String content;
-    private Users reciever;
+    private Users receiver;
     private Users sender;
     @Indexed(direction = IndexDirection.ASCENDING)
     private LocalDateTime localDateTime;
