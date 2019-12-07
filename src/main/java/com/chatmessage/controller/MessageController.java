@@ -21,6 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/messages")
+@CrossOrigin("*")
 public class MessageController {
 
     @Autowired
