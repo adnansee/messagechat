@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -36,6 +37,8 @@ public class MessageServiceImpl implements MessageService {
      * Moreover this method also ensures that is the name is not provided and only the id is provided then the
      * method searches though already added users and if a user with the same id exists the method sets the name of
      * the receiver from the already present user in the database. It does the same for the sender if only id is given.
+     *
+     * Moreover, the methods can be rewritten if the receiver is to be chosen via name and not id.
      *
      * @param {Message}
      * @return response entity with sent message
@@ -184,5 +187,7 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> showAllMessages() {
         return messageRepository.findAll();
     }
+
+
 
 }
