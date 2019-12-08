@@ -2,7 +2,7 @@ package com.chatmessage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+
 
 /** APPLICATION LAUNCHER FOR MESSAGE API
  *
