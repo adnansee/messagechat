@@ -27,5 +27,7 @@ public interface MessageService {
 
     List<Message> showAllMessages();
 
+    String readMyMessage(String message_id);
+
 
 }

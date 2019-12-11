@@ -188,6 +188,11 @@ public class MessageServiceImpl implements MessageService {
         return messageRepository.findAll();
     }
 
+    @Override
+    public String readMyMessage(String message_id) {
+        Message message = messageRepository.findMessageById(message_id);
+        return message.getContent();
+    }
 
 
 }

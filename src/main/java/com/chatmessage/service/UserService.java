@@ -3,9 +3,9 @@ package com.chatmessage.service;
 
 import com.chatmessage.model.Users;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface UserService {
@@ -15,4 +15,6 @@ public interface UserService {
     List<Users> addManyUser(List<Users> users);
     void deleteAllUsers();
     void deleteUser(Users user);
+    void deleteUserById(String user);
+    Users findUserById(String user);
 }

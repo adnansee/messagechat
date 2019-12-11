@@ -58,8 +58,8 @@ public class MessageController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/read/mymessage/{message}")
     @ResponseBody
-    public ResponseEntity<String> readMessages(@PathVariable("message") Message message) {
-        String msgContent = messageService.readMessages(message);
+    public ResponseEntity<String> readMessagesById(@PathVariable("message") String message) {
+        String msgContent = messageService.readMyMessage(message);
         return new ResponseEntity<>(msgContent, HttpStatus.OK);
     }
 
@@ -90,6 +90,7 @@ public class MessageController {
         List<Message> messages = messageService.showAllMessages();
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
+
 
 
 

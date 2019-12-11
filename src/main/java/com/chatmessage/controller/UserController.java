@@ -2,13 +2,13 @@ package com.chatmessage.controller;
 
 import com.chatmessage.model.Users;
 import com.chatmessage.service.UserService;
-import com.chatmessage.service.impl.UserServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.chatmessage.repository.UserRepository;
 import java.util.List;
+
 
 /**
  *  PLease consult the UserServiceImpl Class to view detailed documentation
@@ -49,10 +49,17 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.GONE);
     }
 
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{user}")
-    private ResponseEntity<Void> deleteUser(@PathVariable("user") Users user) {
-       userService.deleteUser(user);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{user_id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable("user_id") String user) {
+        userService.deleteUserById(user);
         return new ResponseEntity<>(HttpStatus.GONE);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getuser/{user_id}")
+    public ResponseEntity<Users> getUsersById(@PathVariable ("user_id") String user_id) {
+        Users users = userService.findUserById(user_id);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+
 }

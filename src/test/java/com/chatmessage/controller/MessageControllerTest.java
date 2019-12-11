@@ -1,9 +1,12 @@
 package com.chatmessage.controller;
 
+import com.chatmessage.MessagechatApplication;
 import com.chatmessage.model.Message;
 import com.chatmessage.model.Users;
 import com.chatmessage.repository.MessageRepository;
 import com.chatmessage.service.MessageService;
+import org.dom4j.tree.ElementQNameIterator;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +23,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.ArrayList;
@@ -31,7 +41,7 @@ import java.util.ArrayList;
 @WebMvcTest(MessageController.class)
 @RunWith(MockitoJUnitRunner.class)
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
+
 
 class MessageControllerTest {
     private static final ObjectMapper om = new ObjectMapper();
@@ -39,26 +49,23 @@ class MessageControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
     @InjectMocks
-    private MessageController messageController;
+    private MessageController mockMessageController;
 
     @MockBean
-    private MessageRepository messageRepository;
+    private MessageRepository mockMessageRepository;
 
     @MockBean
-    private MessageService messageService;
+    private MessageService mockMessageService;
 
 
     @Before
     public void setUpMessage() throws Exception {
-
-        mockMvc = MockMvcBuilders.standaloneSetup(messageController).build();
-
+        mockMvc = MockMvcBuilders.standaloneSetup(mockMessageController).build();
     }
 
     @Test
-    void getAllMessages() throws Exception {
+    void getAllMessagesConnection() throws Exception {
         mockMvc.perform(get("/messages/showallmessages"))
                 .andExpect(status().isOk());
     }
@@ -72,7 +79,6 @@ class MessageControllerTest {
         Users user2 = new Users();
         user2.setId("102");
 
-
         Message message = new Message();
         message.setContent("Hello this is a test message from 101 ro 102");
         message.setSubject("TestMsg101to102");
@@ -80,34 +86,16 @@ class MessageControllerTest {
         message.setSender(user1);
         message.setReceiver(user2);
 
-        Mockito.when(messageRepository.save(message)).thenReturn(message);
+        Mockito.when(mockMessageRepository.save(message)).thenReturn(message);
 
         mockMvc.perform(post("/messages/sendmsg")
                 .content(om.writeValueAsString(message))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(" {\n" +
-                        "            \"id\": \"message101to102\",\n" +
-                        "                \"subject\": \"TestMsg101to102\",\n" +
-                        "                \"content\": \"Hello this is a test message from 101 ro 102\",\n" +
-                        "                \"receiver\": {\n" +
-                        "            \"id\": \"102\",\n" +
-                        "                    \"name\": null\n" +
-                        "        },\n" +
-                        "            \"sender\": {\n" +
-                        "            \"id\": \"101\",\n" +
-                        "                    \"name\": null\n" +
-                        "        },\n" +
-                        "            \"localDateTime\": null\n" +
-                        "        }"));
-
-
-
-               /* .andExpect(jsonPath("$.id", is("message101to102")))
+                .andExpect(jsonPath("$.id", is("message101to102")))
                 .andExpect(jsonPath("$.subject", is("TestMsg101to102")))
-                .andExpect(jsonPath("$.content", is("Hello this is a test message from 101 ro 102")))
-                .andExpect(jsonPath("$.receiver", is("102")))
-                .andExpect(jsonPath("$.sender", is("101")));*/
+                .andExpect(jsonPath("$.content", is("Hello this is a test message from 101 ro 102")));
+
 
 
     }
@@ -129,7 +117,7 @@ class MessageControllerTest {
         messages.add(message1);
         messages.add(message2);
 
-        Mockito.when(messageService.showAllMessages()).thenReturn(messages);
+        Mockito.when(mockMessageService.showAllMessages()).thenReturn(messages);
 
         mockMvc.perform(get("/messages/showallmessages"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -138,13 +126,199 @@ class MessageControllerTest {
 
     }
 
+
     @Test
-    void readMessages() throws Exception {
+    void readMessagesById() throws Exception {
+
+        Message message1 = new Message();
+        message1.setContent("First Message Of The Day");
+        message1.setSubject("First Message Subject");
+        message1.setId("101");
+
+        mockMessageService.sendSingleMessage(message1);
+        Mockito.when(mockMessageService.readMyMessage(message1.getId())).thenReturn(message1.getContent());
+
+        mockMvc.perform(get("/messages/read/mymessage/"+message1.getId()))
+                .andExpect(content().string(message1.getContent()))
+                .andExpect(status().isOk());
+    }
+
+    //DELETE ALL MESSAGES
+
+    @Test
+    void deleteAll1Users() throws Exception {
+        Message message1 = new Message();
+        message1.setContent("First Message Of The Day");
+        message1.setSubject("First Message Subject");
+        message1.setId("101");
+
+        doNothing().when(mockMessageService).deleteAllMessages();
+
+        mockMvc.perform(delete("/messages/deleteallmessages"))
+                .andExpect(status().isGone());
+        verifyNoInteractions(mockMessageRepository);
+        verify(mockMessageService, times(1)).deleteAllMessages();
+    }
+
+    @Test
+    void sendMultipleMessages() throws Exception {
+
+        Users user1 = new Users();
+        user1.setId("101");
+        Users user2 = new Users();
+        user2.setId("102");
+
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 to 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setSender(user1);
+        message.setReceiver(user2);
+
+        Message message1 = new Message();
+        message1.setContent("Hello this is a test message from 102 to 101");
+        message1.setSubject("TestMsg102to101");
+        message1.setId("message102to101");
+        message1.setSender(user2);
+        message1.setReceiver(user1);
+
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
+        messages.add(message1);
+
+        Mockito.when(mockMessageRepository.saveAll(messages)).thenReturn(messages);
+
+        mockMvc.perform(post("/messages/sendmsgs")
+                .content(om.writeValueAsString(messages))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$", hasSize(2)));
     }
 
 
+    //GET ALL MY RECEIVED MESSAGES
     @Test
+    void getAllReceivedMessages() throws Exception {
+        Users user1 = new Users();
+        user1.setId("101");
+        Users user2 = new Users();
+        user2.setId("102");
+
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 to 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setSender(user2);
+        message.setReceiver(user1);
+
+        Message message1 = new Message();
+        message1.setContent("Hello this is a test message from 102 to 101");
+        message1.setSubject("TestMsg102to101");
+        message1.setId("message102to101");
+        message1.setSender(user2);
+        message1.setReceiver(user1);
+        List<Message> messages = new ArrayList<>();
+        messages.add(message1);
+        messages.add(message);
+        Mockito.when(mockMessageService.getAllMessages(user1.getId())).thenReturn(messages);
+
+        mockMvc.perform(get("/messages/read/myrecieved/"+user1.getId()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is("message102to101")))
+                .andExpect(jsonPath("$[0].subject", is("TestMsg102to101")))
+                .andExpect(jsonPath("$[1].id", is("message101to102")))
+                .andExpect(jsonPath("$[1].subject", is("TestMsg101to102")));
+    }
+
+
+
+//GET ALL SENT MESSAGES
+
+
+    @Test
+    void getAllSentMessages() throws Exception {
+        Users user1 = new Users();
+        user1.setId("101");
+        Users user2 = new Users();
+        user2.setId("102");
+
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 to 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setSender(user2);
+        message.setReceiver(user1);
+
+        Message message1 = new Message();
+        message1.setContent("Hello this is a test message from 102 to 101");
+        message1.setSubject("TestMsg102to101");
+        message1.setId("message102to101");
+        message1.setSender(user2);
+        message1.setReceiver(user1);
+        List<Message> messages = new ArrayList<>();
+        messages.add(message1);
+        messages.add(message);
+        Mockito.when(mockMessageService.readSentMessages(user2.getId())).thenReturn(messages);
+
+        mockMvc.perform(get("/messages/read/mysent/"+user2.getId()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is("message102to101")))
+                .andExpect(jsonPath("$[0].subject", is("TestMsg102to101")))
+                .andExpect(jsonPath("$[1].id", is("message101to102")))
+                .andExpect(jsonPath("$[1].subject", is("TestMsg101to102")));
+    }
+
+
+
+
+
+
+
+
+    @Test  //FIX IT
     void estimateDayMessages() throws Exception {
 
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 to 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setLocalDateTime(LocalDateTime.now());
+        mockMessageService.sendSingleMessage(message);
+        Mockito.when(mockMessageService.estimateDayMessages()).thenReturn(String.valueOf(Matchers.any(String.class)));
+
+
+        mockMvc.perform(get("/messages/estimateday"))
+                .andExpect(status().isOk());
+
+
+    }
+
+
+    @Test  //FIX IT
+    void estimateWeekMessages() throws Exception {
+
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 to 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setLocalDateTime(LocalDateTime.now());
+        mockMessageService.sendSingleMessage(message);
+        Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(null);
+//   Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(String.valueOf(Matchers.any(String.class)));
+
+        mockMvc.perform(get("/messages/estimateweek"))
+               // .andExpect(content().contentType((String) null))
+                .andExpect(status().isOk());
+
+
+    }
+
+    @Test
+    public void main() {
+        MessagechatApplication.main(new String[] {});
     }
 }

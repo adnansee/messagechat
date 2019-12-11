@@ -20,7 +20,7 @@ public interface MessageRepository extends MongoRepository<Message, String> {
     //INTERFACE METHOD TO GET ALL SENT MESSAGES VIA USER ID
     List<Message> findAllBySender_Id(String users);
 
-    Optional<Message> findById(String message_id);
+    Message findMessageById(String message_id);
 
 
 
