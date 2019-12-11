@@ -2,42 +2,35 @@ package com.chatmessage.service.impl;
 
 import com.chatmessage.model.Users;
 import com.chatmessage.repository.UserRepository;
-import com.chatmessage.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
-
+//@AutoConfigureDataMongo
+//@EnableMongoRepositories
+@DataMongoTest
 class UserServiceImplTest {
 
-   ///@InjectMocks
-    //@Qualifier
-    //@Autowired
-    // @InjectMocks
-    @Mock
-    UserRepository userRepository;
 
-    //@InjectMocks
-    //@Qualifier
-    //@Autowired
-     @InjectMocks
-    //@Mock
-    //@MockBean
-    UserService userService;
+    @InjectMocks
+    UserServiceImpl mockUserService;
+
+    @Mock
+    UserRepository mockUserRepository;
+
+
 
 
 
@@ -55,11 +48,12 @@ class UserServiceImplTest {
         manyUsers.add(user1);
         manyUsers.add(user2);
 
-        System.out.println(userRepository);
-        System.out.println(userService);
-      Mockito.when(userService.addManyUser(manyUsers)).thenReturn(manyUsers);
+        System.out.println(mockUserRepository);
+        System.out.println(mockUserService);
 
-      // Mockito.when(userRepository.saveAll(manyUsers)).thenReturn(manyUsers);
+        Mockito.when(mockUserService.addManyUser(manyUsers)).thenReturn(manyUsers);
+
+    }
 
 
-}}
+}

@@ -11,11 +11,13 @@ import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,8 +29,7 @@ import org.springframework.http.MediaType;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -41,8 +42,6 @@ import java.util.ArrayList;
 @WebMvcTest(MessageController.class)
 @RunWith(MockitoJUnitRunner.class)
 @AutoConfigureMockMvc
-
-
 class MessageControllerTest {
     private static final ObjectMapper om = new ObjectMapper();
 
@@ -52,7 +51,7 @@ class MessageControllerTest {
     @InjectMocks
     private MessageController mockMessageController;
 
-    @MockBean
+    @Mock
     private MessageRepository mockMessageRepository;
 
     @MockBean
@@ -68,6 +67,10 @@ class MessageControllerTest {
     void getAllMessagesConnection() throws Exception {
         mockMvc.perform(get("/messages/showallmessages"))
                 .andExpect(status().isOk());
+
+        System.out.println(mockMessageController);
+        System.out.println(mockMessageRepository);
+        System.out.println(mockMessageService);
     }
 
 
@@ -308,17 +311,15 @@ class MessageControllerTest {
         message.setLocalDateTime(LocalDateTime.now());
         mockMessageService.sendSingleMessage(message);
         Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(null);
-//   Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(String.valueOf(Matchers.any(String.class)));
+//Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(any(String.class));
 
         mockMvc.perform(get("/messages/estimateweek"))
+              //  .andExpect(content().string(contains("messages")))
                // .andExpect(content().contentType((String) null))
                 .andExpect(status().isOk());
 
 
     }
 
-    @Test
-    public void main() {
-        MessagechatApplication.main(new String[] {});
-    }
+
 }
