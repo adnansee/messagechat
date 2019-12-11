@@ -1,16 +1,12 @@
 package com.chatmessage.controller;
 
 import com.chatmessage.model.Message;
-import com.chatmessage.model.Users;
-import com.chatmessage.repository.MessageRepository;
-import com.chatmessage.repository.UserRepository;
 import com.chatmessage.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.*;
 import java.util.List;
 
 
@@ -44,14 +40,14 @@ public class MessageController {
 //READ ALL RECIEVED MESSAGES
     @RequestMapping(method = RequestMethod.GET, value = "read/myrecieved/{users}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable("users") String users) {
-        List<Message> messages = messageService.getAllMessages(users);
+        List<Message> messages = messageService.getAllReceivedMessages(users);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
 //READ ALL SENT MESSAGES
     @RequestMapping(method = RequestMethod.GET, value = "read/mysent/{users}")
     public ResponseEntity<List<Message>> readSentMessages(@PathVariable("users") String users) {
-        List<Message> messages = messageService.readSentMessages(users);
+        List<Message> messages = messageService.getAllSentMessages(users);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 

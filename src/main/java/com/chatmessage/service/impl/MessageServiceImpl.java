@@ -46,6 +46,32 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message sendSingleMessage(Message message) {
+        userNameCheck(message);
+        messageRepository.save(message);
+        return message;
+    }
+
+
+    /**
+     * SEND MULTIPLE MESSAGES
+     * This method takes a number of messages as a list and sends as Post to MongoDB. Saving the messages here are
+     * considered as sendind the messages.
+     * Before adding the list of objects the method sets the date/time stamp of the sent messgae
+     *
+     * @param {List<Message>}
+     * @return response entity with sent messages
+     */
+
+    @Override
+    public List<Message> sendMultipleMessage(List<Message> messages) {
+        for (Message message : messages) {
+            userNameCheck(message);
+        }
+        messageRepository.saveAll(messages);
+        return messages;
+    }
+
+    private void userNameCheck(Message message) {
         List<Users> allUsers = userRepository.findAll();
         Users receiver = message.getReceiver();
         Users sender = message.getSender();
@@ -65,27 +91,6 @@ public class MessageServiceImpl implements MessageService {
             }
         }
         message.setLocalDateTime(LocalDateTime.now());
-        messageRepository.save(message);
-        return message;
-    }
-
-
-    /**
-     * SEND MULTIPLE MESSAGES
-     * This method takes a number of messages as a list and sends as Post to MongoDB. Saving the messages here are
-     * considered as sendind the messages.
-     * Before adding the list of objects the method sets the date/time stamp of the sent messgae
-     *
-     * @param {List<Message>}
-     * @return response entity with sent messages
-     */
-
-    @Override
-    public List<Message> sendMultipleMessage(List<Message> messages) {
-        for (Message message : messages) {
-            sendSingleMessage(message);
-        }
-        return messages;
     }
 
 
@@ -98,7 +103,7 @@ public class MessageServiceImpl implements MessageService {
      * @return response entity with received messages
      */
     @Override
-    public List<Message> getAllMessages(String users) {
+    public List<Message> getAllReceivedMessages(String users) {
         return messageRepository.findAllByReceiver_Id(users);
     }
 
@@ -111,7 +116,7 @@ public class MessageServiceImpl implements MessageService {
      * @return response entity with sent messages
      */
     @Override
-    public List<Message> readSentMessages(String users) {
+    public List<Message> getAllSentMessages(String users) {
         return messageRepository.findAllBySender_Id(users);
     }
 

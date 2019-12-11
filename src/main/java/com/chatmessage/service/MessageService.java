@@ -13,9 +13,9 @@ public interface MessageService {
 
     List<Message> sendMultipleMessage(List<Message> messages);
 
-    List<Message> getAllMessages (String user_id);
+    List<Message> getAllReceivedMessages(String user_id);
 
-    List<Message> readSentMessages (String user_id);
+    List<Message> getAllSentMessages(String user_id);
 
     String readMessages (Message message);
 

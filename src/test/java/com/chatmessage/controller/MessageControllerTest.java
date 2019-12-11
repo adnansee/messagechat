@@ -1,11 +1,9 @@
 package com.chatmessage.controller;
 
-import com.chatmessage.MessagechatApplication;
 import com.chatmessage.model.Message;
 import com.chatmessage.model.Users;
 import com.chatmessage.repository.MessageRepository;
 import com.chatmessage.service.MessageService;
-import org.dom4j.tree.ElementQNameIterator;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
@@ -17,8 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -223,7 +219,7 @@ class MessageControllerTest {
         List<Message> messages = new ArrayList<>();
         messages.add(message1);
         messages.add(message);
-        Mockito.when(mockMessageService.getAllMessages(user1.getId())).thenReturn(messages);
+        Mockito.when(mockMessageService.getAllReceivedMessages(user1.getId())).thenReturn(messages);
 
         mockMvc.perform(get("/messages/read/myrecieved/"+user1.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -263,7 +259,7 @@ class MessageControllerTest {
         List<Message> messages = new ArrayList<>();
         messages.add(message1);
         messages.add(message);
-        Mockito.when(mockMessageService.readSentMessages(user2.getId())).thenReturn(messages);
+        Mockito.when(mockMessageService.getAllSentMessages(user2.getId())).thenReturn(messages);
 
         mockMvc.perform(get("/messages/read/mysent/"+user2.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
