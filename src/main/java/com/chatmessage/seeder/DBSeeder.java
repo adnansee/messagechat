@@ -1,4 +1,4 @@
-package com.chatmessage.Seeder;
+package com.chatmessage.seeder;
 
 
 import com.chatmessage.model.Message;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.chatmessage.repository.UserRepository;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;

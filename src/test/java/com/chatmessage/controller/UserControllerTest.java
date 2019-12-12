@@ -2,7 +2,6 @@ package com.chatmessage.controller;
 
 import com.chatmessage.repository.UserRepository;
 import com.chatmessage.service.UserService;
-import com.chatmessage.service.impl.UserServiceImpl;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -13,29 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-
 import java.util.List;
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.chatmessage.model.Users;
 import org.mockito.Mockito;
-
 import static org.mockito.Mockito.*;
-
 import java.util.ArrayList;
 
 @WebMvcTest(UserController.class)
@@ -152,10 +143,8 @@ class UserControllerTest {
         Mockito.when(mockUserService.findUserById(user2.getId())).thenReturn(user2);
 
         mockMvc.perform(get("/users/getuser/" + user2.getId()))
-                .andExpect(content().json("{\n" +
-                        "        \"id\": \"101\",\n" +
-                        "        \"name\": \"Baby\"\n" +
-                        "    }"))
+                .andExpect(jsonPath("$.id", is("101")))
+                .andExpect(jsonPath("$.name", is("Baby")))
                 .andExpect(status().isOk());
 
     }

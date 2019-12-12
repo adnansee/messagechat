@@ -19,9 +19,9 @@ public interface MessageService {
 
     String readMessages (Message message);
 
-    String estimateDayMessages();
+    Double estimateDayMessages();
 
-    String estimateWeekMessages();
+    Double estimateWeekMessages();
 
     void deleteAllMessages();
 

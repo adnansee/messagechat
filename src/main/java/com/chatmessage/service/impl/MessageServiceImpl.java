@@ -6,15 +6,13 @@ import com.chatmessage.repository.MessageRepository;
 import com.chatmessage.repository.UserRepository;
 import com.chatmessage.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -22,6 +20,8 @@ public class MessageServiceImpl implements MessageService {
 
     static final int constantSecondsInDay = 86400;
     static final int constantSecondsInWeek = 604800;
+    private static DecimalFormat df = new DecimalFormat("0.00");
+
 
     @Autowired
     MessageRepository messageRepository;
@@ -37,7 +37,7 @@ public class MessageServiceImpl implements MessageService {
      * Moreover this method also ensures that is the name is not provided and only the id is provided then the
      * method searches though already added users and if a user with the same id exists the method sets the name of
      * the receiver from the already present user in the database. It does the same for the sender if only id is given.
-     *
+     * <p>
      * Moreover, the methods can be rewritten if the receiver is to be chosen via name and not id.
      *
      * @param {Message}
@@ -83,10 +83,27 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
+        if (receiver != null && receiver.getName() != null) {
+            for (Users user : allUsers) {
+                if (receiver.getName().equals(user.getName())) {
+                    message.setReceiver(user);
+                }
+            }
+        }
+
+
         if (sender != null && sender.getId() != null) {
             for (Users user : allUsers) {
                 if (sender.getId().equals(user.getId())) {
                     message.setSender(user);
+                }
+            }
+        }
+
+        if (sender != null && sender.getName() != null) {
+            for (Users user : allUsers) {
+                if (sender.getName().equals(user.getName())) {
+                    message.setReceiver(user);
                 }
             }
         }
@@ -143,12 +160,13 @@ public class MessageServiceImpl implements MessageService {
      * @return {String} number of estimated messages in one day
      */
     @Override
-    public String estimateDayMessages() {
+    public Double estimateDayMessages() {
         List<Message> messages = messageRepository.findAll();
         double totalmessages = messages.size();
         LocalTime now = LocalTime.now(ZoneId.systemDefault());
         double estimatedMessagesInDay = ((totalmessages) / (now.toSecondOfDay())) * constantSecondsInDay;
-        return ("Expected messages till the end of the day: " + estimatedMessagesInDay);
+
+        return Double.valueOf(df.format(estimatedMessagesInDay));
     }
 
     /**
@@ -162,12 +180,12 @@ public class MessageServiceImpl implements MessageService {
      * @return {String} number of estimated messages in a week
      */
 
-    public String estimateWeekMessages() {
+    public Double estimateWeekMessages() {
         List<Message> messages = messageRepository.findAll();
         double totalmessages = messages.size();
         LocalTime now = LocalTime.now(ZoneId.systemDefault());
-        double estimatedMessagesInDay = ((totalmessages) / (now.toSecondOfDay())) * constantSecondsInWeek;
-        return ("Expected messages till the end of the week: " + estimatedMessagesInDay);
+        double estimatedMessagesInWeek = ((totalmessages) / (now.toSecondOfDay())) * constantSecondsInWeek;
+        return Double.valueOf(df.format(estimatedMessagesInWeek));
     }
 
     /**

@@ -5,6 +5,7 @@ import com.chatmessage.model.Users;
 import com.chatmessage.repository.MessageRepository;
 import com.chatmessage.repository.UserRepository;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,13 +13,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,6 +37,16 @@ class MessageServiceImplTest {
     @Mock
     UserRepository mockUserRepository;
 
+
+    @Before
+    public void testmessagesTime(){
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 ro 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setLocalDateTime(LocalDateTime.now());
+        mockMessageRepository.save(message);
+    }
 
 
 //DONE
@@ -152,10 +165,33 @@ class MessageServiceImplTest {
 
    @Test
     void estimateDayMessages() {
+       Message message = new Message();
+       message.setContent("Hello this is a test message from 101 ro 102");
+       message.setSubject("TestMsg101to102");
+       message.setId("message101to102");
+       message.setLocalDateTime(LocalDateTime.now());
+
+       List<Message> messages = new ArrayList<>();
+       messages.add(message);
+
+       Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
+       assertEquals(1.1 , mockMessageServiceImpl.estimateDayMessages(),0.5);
     }
 
     @Test
     void estimateWeekMessages() {
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 ro 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setLocalDateTime(LocalDateTime.now());
+
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
+
+        Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
+        assertEquals(7.0 , mockMessageServiceImpl.estimateWeekMessages(),1.5);
+        System.out.println(mockMessageServiceImpl.estimateWeekMessages());
     }
 
     @Test
@@ -197,4 +233,5 @@ class MessageServiceImplTest {
         Mockito.when(mockMessageRepository.findMessageById(message.getId())).thenReturn(message);
         assertEquals(message.getContent(), mockMessageServiceImpl.readMessages(message));
     }
+
 }

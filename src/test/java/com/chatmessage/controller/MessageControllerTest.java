@@ -4,6 +4,7 @@ import com.chatmessage.model.Message;
 import com.chatmessage.model.Users;
 import com.chatmessage.repository.MessageRepository;
 import com.chatmessage.service.MessageService;
+import com.chatmessage.service.impl.MessageServiceImpl;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
@@ -281,14 +282,18 @@ class MessageControllerTest {
         message.setId("message101to102");
         message.setLocalDateTime(LocalDateTime.now());
 
-        Mockito.when(mockMessageService.estimateDayMessages()).thenReturn(String.valueOf((String.class)));
-        System.out.println(mockMessageService.estimateDayMessages()+"------------>>>>>>>>>>>><<<<<<<<<<<<<");
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
 
+
+        Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
+        Mockito.when(mockMessageService.showAllMessages()).thenReturn(messages);
+        System.out.println(mockMessageService.estimateDayMessages() + "------------>>>>>>>>>>>><<<<<<<<<<<<<");
+        System.out.println(mockMessageService + "------------>>>>>>>>>>>><<<<<<<<<<<<<");
         mockMvc.perform(get("/messages/estimateday"))
-                .andExpect(ResultMatcher.matchAll())
                 .andExpect(status().isOk());
 
-
+        //verify(mockMessageService.estimateDayMessages()).
     }
 
 
@@ -301,16 +306,18 @@ class MessageControllerTest {
         message.setSubject("TestMsg101to102");
         message.setId("message101to102");
         message.setLocalDateTime(LocalDateTime.now());
-        mockMessageService.sendSingleMessage(message);
 
-        Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(String.valueOf((String.class)));
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
 
+        Mockito.when(mockMessageService.showAllMessages()).thenReturn(messages);
+        //Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(anyDouble());
+        System.out.println(mockMessageService.estimateWeekMessages());
         mockMvc.perform(get("/messages/estimateweek"))
                 //  .andExpect(content().string(contains("messages")))
                 // .andExpect(content().contentType((String) null))
                 .andExpect(ResultMatcher.matchAll())
                 .andExpect(status().isOk());
-
 
     }
 

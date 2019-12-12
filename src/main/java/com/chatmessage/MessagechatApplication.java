@@ -11,9 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MessagechatApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(MessagechatApplication.class, args);
     }
-
 }

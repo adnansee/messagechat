@@ -62,14 +62,14 @@ public class MessageController {
 //ESTIMATE THE NUMBER OF MESSAGES IN A DAY
     @RequestMapping(method = RequestMethod.GET, value = "/estimateday")
     @ResponseBody
-    public String estimateDayMessages() {
+    public Double estimateDayMessages() {
         return messageService.estimateDayMessages();
     }
 
 //ESTIMATE THE NUMBER OF MESSAGES IN A WEEK
     @RequestMapping(method = RequestMethod.GET, value = "/estimateweek")
     @ResponseBody
-    public String estimateWeekMessages() {
+    public Double estimateWeekMessages() {
         return messageService.estimateWeekMessages();
     }
 

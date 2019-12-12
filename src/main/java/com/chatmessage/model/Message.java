@@ -22,6 +22,7 @@ public class Message {
     @Id
     private String id;
     private String subject;
+
     private String content;
     private Users receiver;     //Give annotation '@NonNull' if send_id must be added to the message
     private Users sender;       //Give annotation '@NonNull' if the receiver_id must be added to the message

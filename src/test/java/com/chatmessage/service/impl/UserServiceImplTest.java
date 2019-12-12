@@ -2,7 +2,6 @@ package com.chatmessage.service.impl;
 
 import com.chatmessage.model.Users;
 import com.chatmessage.repository.UserRepository;
-
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -10,11 +9,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-
 import java.util.ArrayList;
 import java.util.List;
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
