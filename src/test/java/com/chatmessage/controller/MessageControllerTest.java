@@ -85,7 +85,7 @@ class MessageControllerTest {
         message.setSender(user1);
         message.setReceiver(user2);
 
-        Mockito.when(mockMessageRepository.save(message)).thenReturn(message);
+        Mockito.when(mockMessageService.sendSingleMessage(message)).thenReturn(message);
 
         mockMvc.perform(post("/messages/sendmsg")
                 .content(om.writeValueAsString(message))

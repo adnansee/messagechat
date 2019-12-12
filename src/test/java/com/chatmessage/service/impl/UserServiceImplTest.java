@@ -2,6 +2,7 @@ package com.chatmessage.service.impl;
 
 import com.chatmessage.model.Users;
 import com.chatmessage.repository.UserRepository;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,27 +14,19 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
-//@AutoConfigureDataMongo
-//@EnableMongoRepositories
 @DataMongoTest
 class UserServiceImplTest {
 
-
     @InjectMocks
-    UserServiceImpl mockUserService;
+    UserServiceImpl mockUserServiceImpl;
 
     @Mock
     UserRepository mockUserRepository;
-
-
-
-
 
     @Test
     void addManyUser() {
@@ -49,14 +42,8 @@ class UserServiceImplTest {
         manyUsers.add(user1);
         manyUsers.add(user2);
 
-        System.out.println(mockUserRepository);
-        System.out.println(mockUserService);
-
-        Mockito.when(mockUserService.addManyUser(manyUsers)).thenReturn(manyUsers);
-
-        assertEquals(manyUsers, mockUserService.addManyUser(manyUsers));
+        Mockito.when(mockUserRepository.saveAll(manyUsers)).thenReturn(manyUsers);
+        assertEquals(manyUsers, mockUserServiceImpl.addManyUser(manyUsers));
 
     }
-
-
 }

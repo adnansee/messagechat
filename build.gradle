@@ -51,6 +51,9 @@ dependencies {
     compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.0.0'
     // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core
     testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '2.2'
+    testCompile group: 'com.github.fakemongo', name: 'fongo', version: '2.1.0'
+    // https://mvnrepository.com/artifact/de.flapdoodle.embed/de.flapdoodle.embed.mongo
+    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
 
 
 }
