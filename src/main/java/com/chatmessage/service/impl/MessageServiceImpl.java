@@ -161,12 +161,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public Double estimateDayMessages() {
-        List<Message> messages = messageRepository.findAll();
-        double totalmessages = messages.size();
-        LocalTime now = LocalTime.now(ZoneId.systemDefault());
-        double estimatedMessagesInDay = ((totalmessages) / (now.toSecondOfDay())) * constantSecondsInDay;
-
-        return Double.valueOf(df.format(estimatedMessagesInDay));
+        return getAnEstimate(constantSecondsInDay);
     }
 
     /**
@@ -181,10 +176,21 @@ public class MessageServiceImpl implements MessageService {
      */
 
     public Double estimateWeekMessages() {
+        return getAnEstimate(constantSecondsInWeek);
+    }
+
+
+    /** SINGLE METHOD TO ESTIMATE MESSAGES
+     * This method is used above in the method estimateWeekMessages and estimate day messages
+     *
+     * @param constantSeconds
+     * @return
+     */
+    private Double getAnEstimate(int constantSeconds) {
         List<Message> messages = messageRepository.findAll();
         double totalmessages = messages.size();
         LocalTime now = LocalTime.now(ZoneId.systemDefault());
-        double estimatedMessagesInWeek = ((totalmessages) / (now.toSecondOfDay())) * constantSecondsInWeek;
+        double estimatedMessagesInWeek = ((totalmessages) / (now.toSecondOfDay())) * constantSeconds;
         return Double.valueOf(df.format(estimatedMessagesInWeek));
     }
 

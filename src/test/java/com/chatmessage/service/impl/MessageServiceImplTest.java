@@ -39,7 +39,7 @@ class MessageServiceImplTest {
 
 
     @Before
-    public void testmessagesTime(){
+    public void testMessagesTime(){
         Message message = new Message();
         message.setContent("Hello this is a test message from 101 ro 102");
         message.setSubject("TestMsg101to102");
@@ -49,7 +49,7 @@ class MessageServiceImplTest {
     }
 
 
-//DONE
+
     @Test
     void sendSingleMessage() {
 
@@ -151,17 +151,7 @@ class MessageServiceImplTest {
         assertEquals(messages, mockMessageServiceImpl.getAllSentMessages(user2.getId()));
     }
 
-    @Test
 
-    void readMyMessages() {
-        Message message = new Message();
-        message.setContent("Hello this is a test message from 101 ro 102");
-        message.setSubject("TestMsg101to102");
-        message.setId("message101to102");
-
-        Mockito.when(mockMessageRepository.findMessageById(message.getId())).thenReturn(message);
-        assertEquals(message.getContent(), mockMessageServiceImpl.readMyMessage(message.getId()));
-    }
 
    @Test
     void estimateDayMessages() {
@@ -231,7 +221,19 @@ class MessageServiceImplTest {
         message.setId("message101to102");
 
         Mockito.when(mockMessageRepository.findMessageById(message.getId())).thenReturn(message);
-        assertEquals(message.getContent(), mockMessageServiceImpl.readMessages(message));
+        assertEquals(message.getContent(), mockMessageServiceImpl.readMessages(message));/////
+    }
+
+    @Test
+
+    void readMyMessages() {
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 ro 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+
+        Mockito.when(mockMessageRepository.findMessageById(message.getId())).thenReturn(message);
+        assertEquals(message.getContent(), mockMessageServiceImpl.readMyMessage(message.getId()));/////
     }
 
 }

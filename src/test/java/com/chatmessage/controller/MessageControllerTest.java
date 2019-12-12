@@ -286,14 +286,14 @@ class MessageControllerTest {
         messages.add(message);
 
 
+
+      Mockito.when(mockMessageService.showAllMessages()).thenReturn(messages);
         Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
-        Mockito.when(mockMessageService.showAllMessages()).thenReturn(messages);
         System.out.println(mockMessageService.estimateDayMessages() + "------------>>>>>>>>>>>><<<<<<<<<<<<<");
         System.out.println(mockMessageService + "------------>>>>>>>>>>>><<<<<<<<<<<<<");
         mockMvc.perform(get("/messages/estimateday"))
                 .andExpect(status().isOk());
 
-        //verify(mockMessageService.estimateDayMessages()).
     }
 
 
@@ -305,21 +305,19 @@ class MessageControllerTest {
         message.setContent("Hello this is a test message from 101 to 102");
         message.setSubject("TestMsg101to102");
         message.setId("message101to102");
-        message.setLocalDateTime(LocalDateTime.now());
+        //message.setLocalDateTime(LocalDateTime.now());
 
         List<Message> messages = new ArrayList<>();
         messages.add(message);
 
-        Mockito.when(mockMessageService.showAllMessages()).thenReturn(messages);
-        //Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(anyDouble());
+        Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
+        System.out.println(message);
+
         System.out.println(mockMessageService.estimateWeekMessages());
         mockMvc.perform(get("/messages/estimateweek"))
-                //  .andExpect(content().string(contains("messages")))
-                // .andExpect(content().contentType((String) null))
                 .andExpect(ResultMatcher.matchAll())
                 .andExpect(status().isOk());
 
     }
-
 
 }
