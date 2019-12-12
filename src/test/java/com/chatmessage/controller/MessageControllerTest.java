@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,8 +32,8 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 
 
 @WebMvcTest(MessageController.class)
@@ -96,7 +97,6 @@ class MessageControllerTest {
                 .andExpect(jsonPath("$.content", is("Hello this is a test message from 101 ro 102")));
 
 
-
     }
 
 
@@ -137,7 +137,7 @@ class MessageControllerTest {
         mockMessageService.sendSingleMessage(message1);
         Mockito.when(mockMessageService.readMyMessage(message1.getId())).thenReturn(message1.getContent());
 
-        mockMvc.perform(get("/messages/read/mymessage/"+message1.getId()))
+        mockMvc.perform(get("/messages/read/mymessage/" + message1.getId()))
                 .andExpect(content().string(message1.getContent()))
                 .andExpect(status().isOk());
     }
@@ -221,7 +221,7 @@ class MessageControllerTest {
         messages.add(message);
         Mockito.when(mockMessageService.getAllReceivedMessages(user1.getId())).thenReturn(messages);
 
-        mockMvc.perform(get("/messages/read/myrecieved/"+user1.getId()))
+        mockMvc.perform(get("/messages/read/myrecieved/" + user1.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -230,7 +230,6 @@ class MessageControllerTest {
                 .andExpect(jsonPath("$[1].id", is("message101to102")))
                 .andExpect(jsonPath("$[1].subject", is("TestMsg101to102")));
     }
-
 
 
 //GET ALL SENT MESSAGES
@@ -261,7 +260,7 @@ class MessageControllerTest {
         messages.add(message);
         Mockito.when(mockMessageService.getAllSentMessages(user2.getId())).thenReturn(messages);
 
-        mockMvc.perform(get("/messages/read/mysent/"+user2.getId()))
+        mockMvc.perform(get("/messages/read/mysent/" + user2.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -272,13 +271,8 @@ class MessageControllerTest {
     }
 
 
-
-
-
-
-
-
-    @Test  //FIX IT
+    @Test
+        //FIX IT
     void estimateDayMessages() throws Exception {
 
         Message message = new Message();
@@ -286,18 +280,20 @@ class MessageControllerTest {
         message.setSubject("TestMsg101to102");
         message.setId("message101to102");
         message.setLocalDateTime(LocalDateTime.now());
-        mockMessageService.sendSingleMessage(message);
-        Mockito.when(mockMessageService.estimateDayMessages()).thenReturn(String.valueOf(Matchers.any(String.class)));
 
+        Mockito.when(mockMessageService.estimateDayMessages()).thenReturn(String.valueOf((String.class)));
+        System.out.println(mockMessageService.estimateDayMessages()+"------------>>>>>>>>>>>><<<<<<<<<<<<<");
 
         mockMvc.perform(get("/messages/estimateday"))
+                .andExpect(ResultMatcher.matchAll())
                 .andExpect(status().isOk());
 
 
     }
 
 
-    @Test  //FIX IT
+    @Test
+        //FIX IT
     void estimateWeekMessages() throws Exception {
 
         Message message = new Message();
@@ -306,12 +302,13 @@ class MessageControllerTest {
         message.setId("message101to102");
         message.setLocalDateTime(LocalDateTime.now());
         mockMessageService.sendSingleMessage(message);
-        Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(null);
-//Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(any(String.class));
+
+        Mockito.when(mockMessageService.estimateWeekMessages()).thenReturn(String.valueOf((String.class)));
 
         mockMvc.perform(get("/messages/estimateweek"))
-              //  .andExpect(content().string(contains("messages")))
-               // .andExpect(content().contentType((String) null))
+                //  .andExpect(content().string(contains("messages")))
+                // .andExpect(content().contentType((String) null))
+                .andExpect(ResultMatcher.matchAll())
                 .andExpect(status().isOk());
 
 

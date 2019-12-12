@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<Users> addManyUser(List<Users> users) {
-        userRepository.saveAll(users);
-        return users;
+        return userRepository.saveAll(users);
+
     }
 
     /** This method deletes all users from the MongoDB
@@ -62,10 +62,7 @@ public class UserServiceImpl implements UserService {
      * @param {User}
      * @return Http status code
      */
-    @Override
-    public void deleteUser(Users user) {
-        userRepository.delete(user);
-    }
+
 
     @Override
     public void deleteUserById(String user) {

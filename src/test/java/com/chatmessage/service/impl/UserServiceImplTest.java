@@ -16,11 +16,14 @@ import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @RunWith(MockitoJUnitRunner.class)
 @DataMongoTest
-class UserServiceImplTest {
+class
+UserServiceImplTest {
 
     @InjectMocks
     UserServiceImpl mockUserServiceImpl;
@@ -44,6 +47,69 @@ class UserServiceImplTest {
 
         Mockito.when(mockUserRepository.saveAll(manyUsers)).thenReturn(manyUsers);
         assertEquals(manyUsers, mockUserServiceImpl.addManyUser(manyUsers));
+
+    }
+
+    @Test
+    void getAllUsers() {
+        Users user1 = new Users();
+        user1.setId("101");
+        user1.setName("Baby");
+        List<Users> manyUsers = new ArrayList<>();
+        manyUsers.add(user1);
+        Mockito.when(mockUserRepository.findAll()).thenReturn(manyUsers);
+        assertEquals(manyUsers, mockUserServiceImpl.getAllUsers());
+
+    }
+
+    @Test
+    void addUser() {
+        Users user1 = new Users();
+        user1.setId("101");
+        user1.setName("Baby");
+        Users user2 = new Users();
+        user2.setId("101");
+        user2.setName("Dan");
+
+        Mockito.when(mockUserRepository.save(user1)).thenReturn(user1);
+        assertEquals(user1, mockUserServiceImpl.addUser(user1));
+    }
+
+
+    @Test
+    void deleteAllUsers() {
+        Users user1 = new Users();
+        user1.setId("101");
+        user1.setName("Baby");
+        List<Users> users = new ArrayList<>();
+        users.add(user1);
+
+        Mockito.when(mockUserRepository.findAll()).thenReturn(users);
+        mockUserServiceImpl.deleteAllUsers();
+        verify(mockUserRepository, times(1)).deleteAll();
+
+
+    }
+
+    @Test
+    void deleteUserById() {
+        Users user1 = new Users();
+        user1.setId("101");
+        user1.setName("Baby");
+
+        Mockito.when(mockUserRepository.findUsersById(user1.getId())).thenReturn(user1);
+        mockUserServiceImpl.deleteUserById(user1.getId());
+        verify(mockUserRepository, times(1)).deleteById(user1.getId());
+    }
+
+    @Test
+    void findUserById() {
+        Users user1 = new Users();
+        user1.setId("101");
+        user1.setName("Baby");
+
+        Mockito.when(mockUserRepository.findUsersById(user1.getId())).thenReturn(user1);
+        assertEquals(user1, mockUserServiceImpl.findUserById(user1.getId()));
 
     }
 }

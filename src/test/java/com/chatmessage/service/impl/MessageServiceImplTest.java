@@ -139,7 +139,7 @@ class MessageServiceImplTest {
     }
 
     @Test
-        //with id
+
     void readMyMessages() {
         Message message = new Message();
         message.setContent("Hello this is a test message from 101 ro 102");

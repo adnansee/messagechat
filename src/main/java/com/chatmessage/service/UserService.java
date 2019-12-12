@@ -14,7 +14,6 @@ public interface UserService {
     Users addUser(Users user);
     List<Users> addManyUser(List<Users> users);
     void deleteAllUsers();
-    void deleteUser(Users user);
     void deleteUserById(String user);
     Users findUserById(String user);
 }
