@@ -70,7 +70,6 @@ class UserServiceImplTest {
     /**
      * Test getting one user
      */
-
     @Test
     void getUserById() {
         Users user1 = new Users();
