@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.event.annotation.BeforeTestMethod;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -124,7 +126,7 @@ class MessageServiceImplTest {
         user1.setName("Baby");
 
         Users user2 = new Users();
-        user2.setId("101");
+        user2.setId("102");
         user2.setName("Dan");
 
         Message message = new Message();
@@ -165,7 +167,9 @@ class MessageServiceImplTest {
        messages.add(message);
 
        Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
-       assertEquals(1.1 , mockMessageServiceImpl.estimateDayMessages(),0.5);
+       LocalTime now = LocalTime.now(ZoneId.systemDefault());
+       double expectedMessagesInDay = (double) (messages.size()) / (now.toSecondOfDay()) * 86400;
+       assertEquals(expectedMessagesInDay , mockMessageServiceImpl.estimateDayMessages(),0.25);
     }
 
     @Test
@@ -180,8 +184,10 @@ class MessageServiceImplTest {
         messages.add(message);
 
         Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
-        assertEquals(7.0 , mockMessageServiceImpl.estimateWeekMessages(),1.5);
-        System.out.println(mockMessageServiceImpl.estimateWeekMessages());
+        LocalTime now = LocalTime.now(ZoneId.systemDefault());
+        double expectedMessagesInWeek = (double) (messages.size()) / (now.toSecondOfDay()) * 604800;
+        System.out.println(expectedMessagesInWeek);
+        assertEquals(expectedMessagesInWeek , mockMessageServiceImpl.estimateWeekMessages(),0.25);
     }
 
     @Test
@@ -234,6 +240,79 @@ class MessageServiceImplTest {
 
         Mockito.when(mockMessageRepository.findMessageById(message.getId())).thenReturn(message);
         assertEquals(message.getContent(), mockMessageServiceImpl.readMyMessage(message.getId()));/////
+    }
+
+
+    @Test
+    void findReceiverIdAndAllocatedWhenOnlyNameGiven(){
+
+        //Sender
+        Users user1 = new Users();
+        user1.setId("101");
+        user1.setName("Baby");
+
+        //Receiver
+        Users user2 = new Users();
+        user2.setId("102");
+        user2.setName("Dan");
+
+        //Dummy
+        Users user3 = new Users();
+        user3.setName("Dan");
+
+        List<Users> users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 ro 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setReceiver(user3);
+        message.setSender(user2);
+
+        Mockito.when(mockUserRepository.findAll()).thenReturn(users);
+
+        Mockito.when(mockMessageServiceImpl.sendSingleMessage(message)).thenReturn(message);
+        System.out.println(message);
+        System.out.println(message.getReceiver().getId());
+        assertEquals(user2.getId(), message.getReceiver().getId());
+
+    }
+
+    @Test
+    void findSenderIdAndAllocatedWhenOnlyNameGiven(){
+        //Sender
+        Users user1 = new Users();
+        user1.setId("101");
+        user1.setName("Baby");
+
+        //Receiver
+        Users user2 = new Users();
+        user2.setId("102");
+        user2.setName("Dan");
+
+        //Dummy
+        Users user3 = new Users();
+        user3.setId("102");
+
+        List<Users> users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 ro 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setReceiver(user1);
+        message.setSender(user3);
+
+        Mockito.when(mockUserRepository.findAll()).thenReturn(users);
+
+        Mockito.when(mockMessageServiceImpl.sendSingleMessage(message)).thenReturn(message);
+        System.out.println(message);
+        System.out.println(message.getSender().getId());
+        assertEquals(user2.getId(), message.getSender().getId());
     }
 
 }

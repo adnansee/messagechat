@@ -57,7 +57,7 @@ class MessageControllerTest {
 
 
     @Before
-    public void setUpMessage() throws Exception {
+    public void setUpMessage(){
         mockMvc = MockMvcBuilders.standaloneSetup(mockMessageController).build();
     }
 
@@ -305,12 +305,14 @@ class MessageControllerTest {
         message.setContent("Hello this is a test message from 101 to 102");
         message.setSubject("TestMsg101to102");
         message.setId("message101to102");
-        //message.setLocalDateTime(LocalDateTime.now());
+        message.setLocalDateTime(LocalDateTime.now());
 
         List<Message> messages = new ArrayList<>();
         messages.add(message);
 
+        Mockito.when(mockMessageService.sendSingleMessage(message)).thenReturn(message);
         Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
+
         System.out.println(message);
 
         System.out.println(mockMessageService.estimateWeekMessages());
