@@ -118,8 +118,9 @@ public class MessageServiceImpl implements MessageService {
             if (message.getId().equals(message1.getId())) {
                 message.setId(message.getId() + "+");
             }
-            message.setLocalDateTime(LocalDateTime.now());
+
         }
+        message.setLocalDateTime(LocalDateTime.now());
 
     }
 

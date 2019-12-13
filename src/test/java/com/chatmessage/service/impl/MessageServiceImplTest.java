@@ -50,6 +50,7 @@ class MessageServiceImplTest {
         message.setSubject("TestMsg101to102");
         message.setId("message101to102");
 
+
         Mockito.when(mockMessageRepository.save(message)).thenReturn(message);
         assertEquals(message, mockMessageServiceImpl.sendSingleMessage(message));
     }
