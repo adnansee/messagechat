@@ -4,15 +4,13 @@ import com.chatmessage.model.Message;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.Optional;
 
-/** MESSAGE REPOSITORY CLASS WITH MONGOREPOSITORY EXTENDED
+
+/** MESSAGE REPOSITORY CLASS WITH MONGO REPOSITORY EXTENDED
  *
  */
 @Repository
 public interface MessageRepository extends MongoRepository<Message, String> {
-
-
 
     //INTERFACE METHOD TO GET ALL INCOMING MESSAGES VIA USER ID
     List<Message> findAllByReceiver_Id(String users);
@@ -20,10 +18,8 @@ public interface MessageRepository extends MongoRepository<Message, String> {
     //INTERFACE METHOD TO GET ALL SENT MESSAGES VIA USER ID
     List<Message> findAllBySender_Id(String users);
 
+    //INTERFACE METHOD TO FIND MESSAGE BY ID
     Message findMessageById(String message_id);
-
-
-
 
 
 }

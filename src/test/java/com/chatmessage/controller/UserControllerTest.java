@@ -14,20 +14,31 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+
 import java.util.List;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import com.chatmessage.model.Users;
 import org.mockito.Mockito;
+
 import static org.mockito.Mockito.*;
+
 import java.util.ArrayList;
+
+/**
+ * USER CONTROLLER TESTS CLASS
+ */
 
 @WebMvcTest(UserController.class)
 @RunWith(MockitoJUnitRunner.class)
@@ -50,10 +61,16 @@ class UserControllerTest {
 
 
     @Before
-    public void setUpUser() throws Exception {
+    public void setUpUser() {
         mockMvc = MockMvcBuilders.standaloneSetup(mockUserController).build();
 
     }
+
+    /**
+     * Testing connection
+     *
+     * @throws Exception
+     */
 
     @Test
     void testConnection() throws Exception {
@@ -61,6 +78,11 @@ class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Testing method to get all users that are added
+     *
+     * @throws Exception
+     */
 
     @Test
     void getAllUsers() throws Exception {
@@ -79,7 +101,14 @@ class UserControllerTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is("101")))
                 .andExpect(jsonPath("$[0].name", is("Baby")));
+        verifyNoInteractions(mockUserRepository);
     }
+
+    /**
+     * Testing if users are added
+     *
+     * @throws Exception
+     */
 
     @Test
     void addUser() throws Exception {
@@ -87,11 +116,10 @@ class UserControllerTest {
         user2.setId("101");
         user2.setName("Baby");
 
-        List<Users> users = new
-                ArrayList<>();
+        List<Users> users = new ArrayList<>();
         users.add(user2);
-        Mockito.when(mockUserRepository.save(user2)).thenReturn(user2);
 
+        Mockito.when(mockUserService.addUser(user2)).thenReturn(user2);
         mockMvc.perform(post("/users/adduser")
                 .content(om.writeValueAsString(user2))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
@@ -103,6 +131,11 @@ class UserControllerTest {
 
     }
 
+    /**
+     * Testing deleting user
+     *
+     * @throws Exception
+     */
     @Test
     void deleteUsers() throws Exception {
         Users user2 = new Users();
@@ -116,6 +149,12 @@ class UserControllerTest {
         verifyNoInteractions(mockUserRepository);
         verify(mockUserService, times(1)).deleteUserById(user2.getId());
     }
+
+    /**
+     * Testing deleting all users
+     *
+     * @throws Exception
+     */
 
     @Test
     void deleteAllUsers() throws Exception {
@@ -131,9 +170,12 @@ class UserControllerTest {
         verify(mockUserService, times(1)).deleteAllUsers();
     }
 
+    /**
+     * Testing get user by id
+     *
+     * @throws Exception
+     */
 
-
-    //FIND USER BY ID
     @Test
     void getUserById() throws Exception {
         Users user2 = new Users();
@@ -146,10 +188,14 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id", is("101")))
                 .andExpect(jsonPath("$.name", is("Baby")))
                 .andExpect(status().isOk());
-
+        verifyNoInteractions(mockUserRepository);
     }
 
-//ADD USERS
+    /**
+     * Testing adding many users
+     *
+     * @throws Exception
+     */
 
     @Test
     void addManyUsers() throws Exception {
@@ -172,11 +218,7 @@ class UserControllerTest {
         verify(mockUserService, times(1)).addManyUser(users);
 
     }
-
 }
-
-
-//ADD USER WITH NULL NAME..
 
 
 

@@ -90,8 +90,6 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
-
-
         if (sender != null && sender.getId() != null) {
             for (Users user : allUsers) {
                 if (sender.getId().equals(user.getId())) {
@@ -99,7 +97,6 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
-
         if (sender != null && sender.getName() != null) {
             for (Users user : allUsers) {
                 if (sender.getName().equals(user.getName())) {
@@ -139,15 +136,25 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * GET PARTICULAR MESSAGE CONTENT
-     * This method lets us read a particular message. Messages are identified by the message
+     * This method lets us read a particular message. Messages are identified by the message id and if
+     * no message exits the method returns a string "Message does not exist"
      *
-     * @param {Message} message id
+     * @param {String} message id
      * @return {String} message content
      */
     @Override
-    public String readMessages(Message message) {
-        return (message.getContent());
+    public String readMyMessage(String message_id) {
+        List<Message> messages = messageRepository.findAll();
+        String answer = "Message does not exist";
+        for (Message message1 : messages
+        ) {
+            if (message1.getId().equals(message_id)) {
+                answer = messageRepository.findMessageById(message_id).getContent();
+            }
+        }
+        return answer;
     }
+
 
     /**
      * ESTIMATE THE NUMBER OF MESSAGES THAT WILL BE SENT BY THE END OF THE DAY
@@ -157,7 +164,7 @@ public class MessageServiceImpl implements MessageService {
      * of seconds in a day, this returning an estimated number of messages.
      *
      * @param
-     * @return {String} number of estimated messages in one day
+     * @return {Double} number of estimated messages in one day
      */
     @Override
     public Double estimateDayMessages() {
@@ -172,7 +179,7 @@ public class MessageServiceImpl implements MessageService {
      * of seconds in a week, this returning an estimated number of messages for a week.
      *
      * @param
-     * @return {String} number of estimated messages in a week
+     * @return {Double} number of estimated messages in a week
      */
 
     public Double estimateWeekMessages() {
@@ -180,7 +187,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
 
-    /** SINGLE METHOD TO ESTIMATE MESSAGES
+    /**
+     * SINGLE METHOD TO ESTIMATE MESSAGES
      * This method is used above in the method estimateWeekMessages and estimate day messages
      *
      * @param constantSeconds
@@ -188,9 +196,9 @@ public class MessageServiceImpl implements MessageService {
      */
     private Double getAnEstimate(int constantSeconds) {
         List<Message> messages = messageRepository.findAll();
-        double totalmessages = messages.size();
+        double totalMessages = messages.size();
         LocalTime now = LocalTime.now(ZoneId.systemDefault());
-        double estimatedMessagesInWeek = ((totalmessages) / (now.toSecondOfDay())) * constantSeconds;
+        double estimatedMessagesInWeek = ((totalMessages) / (now.toSecondOfDay())) * constantSeconds;
         return Double.valueOf(df.format(estimatedMessagesInWeek));
     }
 
@@ -217,11 +225,11 @@ public class MessageServiceImpl implements MessageService {
         return messageRepository.findAll();
     }
 
-    @Override
-    public String readMyMessage(String message_id) {
-        Message message = messageRepository.findMessageById(message_id);
-        return message.getContent();
-    }
-
 
 }
+
+
+
+
+
+

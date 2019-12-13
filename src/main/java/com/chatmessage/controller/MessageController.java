@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
 /**
- * REST CONTROLLER FOR MESSEGE SERVICES
+ * REST CONTROLLER FOR MESSAGE SERVICES
  * Please consult the MessageServiceImpl class in the service package to see the detailed documentation
  * of the methods
  */
+
 @RestController
 @RequestMapping("/messages")
 @CrossOrigin("*")
@@ -54,8 +54,8 @@ public class MessageController {
 //READ MESSAGE CONTENT
     @RequestMapping(method = RequestMethod.GET, value = "/read/mymessage/{message}")
     @ResponseBody
-    public ResponseEntity<String> readMessagesById(@PathVariable("message") String message) {
-        String msgContent = messageService.readMyMessage(message);
+    public ResponseEntity<String> readMessagesById(@PathVariable("message") String message_id) {
+        String msgContent = messageService.readMyMessage(message_id);
         return new ResponseEntity<>(msgContent, HttpStatus.OK);
     }
 

@@ -4,8 +4,6 @@ import com.chatmessage.model.Message;
 import com.chatmessage.model.Users;
 import com.chatmessage.repository.MessageRepository;
 import com.chatmessage.repository.UserRepository;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,17 +11,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.*;
+
+/**
+ * MESSAGE SERVICES TEST CLASS
+ */
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,17 +38,9 @@ class MessageServiceImplTest {
     UserRepository mockUserRepository;
 
 
-    @Before
-    public void testMessagesTime(){
-        Message message = new Message();
-        message.setContent("Hello this is a test message from 101 ro 102");
-        message.setSubject("TestMsg101to102");
-        message.setId("message101to102");
-        message.setLocalDateTime(LocalDateTime.now());
-        mockMessageRepository.save(message);
-    }
-
-
+    /**
+     * Testing sending single message
+     */
 
     @Test
     void sendSingleMessage() {
@@ -60,11 +50,14 @@ class MessageServiceImplTest {
         message.setSubject("TestMsg101to102");
         message.setId("message101to102");
 
-        Message message1 = new Message();
         Mockito.when(mockMessageRepository.save(message)).thenReturn(message);
         assertEquals(message, mockMessageServiceImpl.sendSingleMessage(message));
-
     }
+
+    /**
+     * Testing sending multiple messages
+     */
+
 
     @Test
     void sendMultipleMessage() {   //check again not working
@@ -81,10 +74,13 @@ class MessageServiceImplTest {
 
         Mockito.when(mockMessageRepository.saveAll(messages)).thenReturn(messages);
         assertEquals(messages, mockMessageServiceImpl.sendMultipleMessage(messages));
-
     }
+
+    /**
+     * Testing showing all received messages
+     */
     @Test
-    void getAllMessages() {
+    void getAllReceivedMessages() {
         Users user1 = new Users();
         user1.setId("101");
         user1.setName("Baby");
@@ -109,7 +105,6 @@ class MessageServiceImplTest {
 
         List<Message> messages = new ArrayList<>();
         messages.add(message);
-
         List<Message> messages1 = new ArrayList<>();
         messages1.add(message1);
 
@@ -118,8 +113,12 @@ class MessageServiceImplTest {
 
     }
 
+    /**
+     * Testing all sent messages
+     */
+
     @Test
-    void readSentMessages() {
+    void getAllSentMessages() {
 
         Users user1 = new Users();
         user1.setId("101");
@@ -145,7 +144,6 @@ class MessageServiceImplTest {
 
         List<Message> messages = new ArrayList<>();
         messages.add(message);
-
         List<Message> messages1 = new ArrayList<>();
         messages1.add(message1);
 
@@ -154,23 +152,30 @@ class MessageServiceImplTest {
     }
 
 
+    /**
+     * Testing estimate messages till end of the day
+     */
 
-   @Test
+    @Test
     void estimateDayMessages() {
-       Message message = new Message();
-       message.setContent("Hello this is a test message from 101 ro 102");
-       message.setSubject("TestMsg101to102");
-       message.setId("message101to102");
-       message.setLocalDateTime(LocalDateTime.now());
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 ro 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+        message.setLocalDateTime(LocalDateTime.now());
 
-       List<Message> messages = new ArrayList<>();
-       messages.add(message);
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
 
-       Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
-       LocalTime now = LocalTime.now(ZoneId.systemDefault());
-       double expectedMessagesInDay = (double) (messages.size()) / (now.toSecondOfDay()) * 86400;
-       assertEquals(expectedMessagesInDay , mockMessageServiceImpl.estimateDayMessages(),0.25);
+        Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
+        LocalTime now = LocalTime.now(ZoneId.systemDefault());
+        double expectedMessagesInDay = (double) (messages.size()) / (now.toSecondOfDay()) * 86400;
+        assertEquals(expectedMessagesInDay, mockMessageServiceImpl.estimateDayMessages(), 0.25);
     }
+
+    /**
+     * Testing estimate messasgs till the end of the week
+     */
 
     @Test
     void estimateWeekMessages() {
@@ -187,8 +192,12 @@ class MessageServiceImplTest {
         LocalTime now = LocalTime.now(ZoneId.systemDefault());
         double expectedMessagesInWeek = (double) (messages.size()) / (now.toSecondOfDay()) * 604800;
         System.out.println(expectedMessagesInWeek);
-        assertEquals(expectedMessagesInWeek , mockMessageServiceImpl.estimateWeekMessages(),0.25);
+        assertEquals(expectedMessagesInWeek, mockMessageServiceImpl.estimateWeekMessages(), 0.25);
     }
+
+    /**
+     * Testing delete all messages
+     */
 
     @Test
     void deleteAllMessages() {
@@ -204,6 +213,10 @@ class MessageServiceImplTest {
         verify(mockMessageRepository, times(1)).deleteAll();
     }
 
+
+    /**
+     * Testing show all messages in the DB
+     */
     @Test
     void showAllMessages() {
 
@@ -218,33 +231,38 @@ class MessageServiceImplTest {
         assertEquals(messages, mockMessageServiceImpl.showAllMessages());
     }
 
-   @Test
-        //without id is it really needed
-    void readMyMessage() {
+    /**
+     * Testing reading contents of message
+     */
+
+    @Test
+    void readMessagesContent() {
         Message message = new Message();
         message.setContent("Hello this is a test message from 101 ro 102");
         message.setSubject("TestMsg101to102");
         message.setId("message101to102");
 
+        Message message1 = new Message();
+        message1.setId("1");
+
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
+
+        Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
         Mockito.when(mockMessageRepository.findMessageById(message.getId())).thenReturn(message);
-        assertEquals(message.getContent(), mockMessageServiceImpl.readMessages(message));/////
+
+        assertEquals(message.getContent(), mockMessageServiceImpl.readMyMessage(message.getId()));
+        assertEquals("Message does not exist", mockMessageServiceImpl.readMyMessage(message1.getId()));
+
     }
 
-    @Test
-
-    void readMyMessages() {
-        Message message = new Message();
-        message.setContent("Hello this is a test message from 101 ro 102");
-        message.setSubject("TestMsg101to102");
-        message.setId("message101to102");
-
-        Mockito.when(mockMessageRepository.findMessageById(message.getId())).thenReturn(message);
-        assertEquals(message.getContent(), mockMessageServiceImpl.readMyMessage(message.getId()));/////
-    }
-
+    /**
+     * Testing if receiver id is added if the message does not include receiver id
+     * and only contains a name. If user with that name is in the DB the method adds the name
+     */
 
     @Test
-    void findReceiverIdAndAllocatedWhenOnlyNameGiven(){
+    void findReceiverIdAndAllocatedWhenOnlyNameGiven() {
 
         //Sender
         Users user1 = new Users();
@@ -272,16 +290,17 @@ class MessageServiceImplTest {
         message.setSender(user2);
 
         Mockito.when(mockUserRepository.findAll()).thenReturn(users);
-
         Mockito.when(mockMessageServiceImpl.sendSingleMessage(message)).thenReturn(message);
-        System.out.println(message);
-        System.out.println(message.getReceiver().getId());
         assertEquals(user2.getId(), message.getReceiver().getId());
-
     }
 
+    /**
+     * Testing if sender id is added if the message does not include sender id
+     * and only contains a name. If user with that name is in the DB the method adds the name
+     */
+
     @Test
-    void findSenderIdAndAllocatedWhenOnlyNameGiven(){
+    void findSenderIdAndAllocatedWhenOnlyNameGiven() {
         //Sender
         Users user1 = new Users();
         user1.setId("101");
@@ -308,10 +327,7 @@ class MessageServiceImplTest {
         message.setSender(user3);
 
         Mockito.when(mockUserRepository.findAll()).thenReturn(users);
-
         Mockito.when(mockMessageServiceImpl.sendSingleMessage(message)).thenReturn(message);
-        System.out.println(message);
-        System.out.println(message.getSender().getId());
         assertEquals(user2.getId(), message.getSender().getId());
     }
 

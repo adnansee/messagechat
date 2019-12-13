@@ -17,8 +17,6 @@ public interface MessageService {
 
     List<Message> getAllSentMessages(String user_id);
 
-    String readMessages (Message message);
-
     Double estimateDayMessages();
 
     Double estimateWeekMessages();

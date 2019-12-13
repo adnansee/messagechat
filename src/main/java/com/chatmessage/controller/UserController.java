@@ -2,7 +2,6 @@ package com.chatmessage.controller;
 
 import com.chatmessage.model.Users;
 import com.chatmessage.service.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import java.util.List;
 
 
 /**
+ * REST CONTROLLER FOR USER SERVICES
  *  PLease consult the UserServiceImpl Class to view detailed documentation
  */
 
@@ -60,6 +60,4 @@ public class UserController {
         Users users = userService.findUserById(user_id);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
-
 }

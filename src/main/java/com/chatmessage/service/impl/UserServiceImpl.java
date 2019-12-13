@@ -4,12 +4,9 @@ import com.chatmessage.model.Users;
 import com.chatmessage.repository.UserRepository;
 import com.chatmessage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
-
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,9 +20,7 @@ public class UserServiceImpl implements UserService {
      * @return {List<Users>} all users that are added to the MongoDB
      */
     @Override
-    public List<Users> getAllUsers() {
-        return this.userRepository.findAll();
-    }
+    public List<Users> getAllUsers() { return this.userRepository.findAll(); }
 
     /** ADD ONE USER TO THE DATABASE
      * This method adds a user to the MongoDB
@@ -33,10 +28,7 @@ public class UserServiceImpl implements UserService {
      * @return Http status code
      */
     @Override
-    public Users addUser(Users user) {
-        userRepository.save(user);
-        return user;
-    }
+    public Users addUser(Users user) { userRepository.save(user); return user; }
 
     /** ADD MULTIPLE USERS TO THE DATABASE
      * This method adds multiple user to the MongoDB
@@ -44,10 +36,7 @@ public class UserServiceImpl implements UserService {
      * @return Http status code
      */
     @Override
-    public List<Users> addManyUser(List<Users> users) {
-        return userRepository.saveAll(users);
-
-    }
+    public List<Users> addManyUser(List<Users> users) { return userRepository.saveAll(users); }
 
     /** This method deletes all users from the MongoDB
      * @param
@@ -65,15 +54,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void deleteUserById(String user) {
-       //Optional<Users> u = userRepository.findById(user);
-        userRepository.deleteById(user);
-    }
+    public void deleteUserById(String user) { userRepository.deleteById(user); }
 
     @Override
-    public Users findUserById(String user) {
-        return userRepository.findUsersById(user);
-    }
+    public Users findUserById(String user) { return userRepository.findUsersById(user); }
 
 
 }
