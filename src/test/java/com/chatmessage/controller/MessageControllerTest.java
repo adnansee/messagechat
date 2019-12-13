@@ -155,6 +155,7 @@ class MessageControllerTest {
      *
      * @throws Exception
      */
+
     @Test
     void readMessagesById() throws Exception {
 
@@ -172,13 +173,11 @@ class MessageControllerTest {
         verifyNoInteractions(mockMessageRepository);
     }
 
-
     /**
      * Testing get all received messages
      *
      * @throws Exception
      */
-
 
     @Test
     void getAllReceivedMessages() throws Exception {
@@ -222,7 +221,6 @@ class MessageControllerTest {
      * @throws Exception
      */
 
-
     @Test
     void getAllSentMessages() throws Exception {
         Users user1 = new Users();
@@ -258,7 +256,6 @@ class MessageControllerTest {
                 .andExpect(jsonPath("$[1].subject", is("TestMsg101to102")));
         verifyNoInteractions(mockMessageRepository);
     }
-
 
     /**
      * Testing estimated messages to expect till the end of the day
@@ -370,4 +367,5 @@ class MessageControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)));
         verifyNoInteractions(mockMessageRepository);
     }
+
 }

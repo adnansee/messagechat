@@ -291,6 +291,7 @@ class MessageServiceImplTest {
 
         Mockito.when(mockUserRepository.findAll()).thenReturn(users);
         Mockito.when(mockMessageServiceImpl.sendSingleMessage(message)).thenReturn(message);
+        System.out.println(user2);
         assertEquals(user2.getId(), message.getReceiver().getId());
     }
 
@@ -329,6 +330,31 @@ class MessageServiceImplTest {
         Mockito.when(mockUserRepository.findAll()).thenReturn(users);
         Mockito.when(mockMessageServiceImpl.sendSingleMessage(message)).thenReturn(message);
         assertEquals(user2.getId(), message.getSender().getId());
+    }
+
+    /**
+     * Adds a '+' sign to the message id if another message already exists in the DB
+     * with the same id.
+     */
+
+    @Test
+    void sendMessageWithChangedID() {
+        Message message = new Message();
+        message.setContent("Hello this is a test message from 101 ro 102");
+        message.setSubject("TestMsg101to102");
+        message.setId("message101to102");
+
+        Message message1 = new Message();
+        message1.setContent("Hello this is a test message from 101 ro 102");
+        message1.setSubject("TestMsg101to102");
+        message1.setId("message101to102");
+        List<Message> messages = new ArrayList<>();
+        messages.add(message);
+
+        Mockito.when(mockMessageRepository.findAll()).thenReturn(messages);
+        Mockito.when(mockMessageServiceImpl.sendSingleMessage(message1)).thenReturn(message1);
+        System.out.println(message1);
+        assertEquals((message1.getId()), message.getId() + "+");
     }
 
 }

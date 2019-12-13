@@ -15,6 +15,11 @@ import java.time.ZoneId;
 import java.util.List;
 
 
+/**
+ * MESSAGE SERVICE IMPLEMENTATION CLASS
+ */
+
+
 @Service
 public class MessageServiceImpl implements MessageService {
 
@@ -76,6 +81,9 @@ public class MessageServiceImpl implements MessageService {
         Users receiver = message.getReceiver();
         Users sender = message.getSender();
 
+        List<Message> messages = messageRepository.findAll();
+
+
         if (receiver != null && receiver.getId() != null) {
             for (Users user : allUsers) {
                 if (receiver.getId().equals(user.getId())) {
@@ -104,9 +112,16 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
-        message.setLocalDateTime(LocalDateTime.now());
-    }
 
+        for (Message message1 : messages
+        ) {
+            if (message.getId().equals(message1.getId())) {
+                message.setId(message.getId() + "+");
+            }
+            message.setLocalDateTime(LocalDateTime.now());
+        }
+
+    }
 
     /**
      * LIST INCOMING MESSAGES

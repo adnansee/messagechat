@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+/**
+ * USER SERVICE IMPLEMENTATION CLASS
+ */
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     /** SHOW ALL USERS ADDED
      * This methos shows all users that are present in the MonngoDB
-     * @param
+     *
      * @return {List<Users>} all users that are added to the MongoDB
      */
     @Override
@@ -25,7 +29,7 @@ public class UserServiceImpl implements UserService {
     /** ADD ONE USER TO THE DATABASE
      * This method adds a user to the MongoDB
      * @param {User}
-     * @return Http status code
+     *
      */
     @Override
     public Users addUser(Users user) { userRepository.save(user); return user; }
@@ -33,14 +37,14 @@ public class UserServiceImpl implements UserService {
     /** ADD MULTIPLE USERS TO THE DATABASE
      * This method adds multiple user to the MongoDB
      * @param {List<User>}
-     * @return Http status code
+     *
      */
     @Override
     public List<Users> addManyUser(List<Users> users) { return userRepository.saveAll(users); }
 
     /** This method deletes all users from the MongoDB
      * @param
-     * @return Http status code
+     *
      */
     @Override
     public void deleteAllUsers() {
@@ -49,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     /** This method deletes a user to the MongoDB
      * @param {User}
-     * @return Http status code
+     *
      */
 
 

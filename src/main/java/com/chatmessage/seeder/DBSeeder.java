@@ -13,11 +13,12 @@ import com.chatmessage.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+
 /**
- * Simply enters some data in command line to test
+ * DATABASE SEEDER CLASS TO TEST
  */
 @Component
-public class DBSeeder implements CommandLineRunner{
+public class DBSeeder implements CommandLineRunner {
 
     @Autowired
     private UserRepository userRepository;
@@ -25,14 +26,12 @@ public class DBSeeder implements CommandLineRunner{
     private MessageRepository messageRepository;
 
 
-
     /**
      * This class simply enters some data via command line to test
-    *
-    **/
+     **/
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args){
         Users user1 = new Users();
         user1.setId("101");
         user1.setName("Eddy");
@@ -40,7 +39,6 @@ public class DBSeeder implements CommandLineRunner{
         Users user2 = new Users();
         user2.setId("102");
         user2.setName("Dan");
-
 
         Message m1 = new Message();
         m1.setId("message1");
@@ -58,12 +56,10 @@ public class DBSeeder implements CommandLineRunner{
         m2.setLocalDateTime(LocalDateTime.now());
         m2.setSubject("Hello User 1 Eddy from Dan");
 
-
-        List<Users> users = Arrays.asList(user1,user2);
+        List<Users> users = Arrays.asList(user1, user2);
         this.userRepository.saveAll(users);
-        List<Message> messages = Arrays.asList(m1,m2);
+        List<Message> messages = Arrays.asList(m1, m2);
         this.messageRepository.saveAll(messages);
-         }
-
+    }
 
 }

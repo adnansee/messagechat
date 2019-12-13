@@ -3,8 +3,12 @@ package com.chatmessage.service;
 
 import com.chatmessage.model.Message;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
+
+/**
+ * MESSAGE SERVICE INTERFACE CLASS
+ */
 
 @Service
 public interface MessageService {

@@ -116,9 +116,7 @@ class UserControllerTest {
         user2.setId("101");
         user2.setName("Baby");
 
-        List<Users> users = new ArrayList<>();
-        users.add(user2);
-
+       
         Mockito.when(mockUserService.addUser(user2)).thenReturn(user2);
         mockMvc.perform(post("/users/adduser")
                 .content(om.writeValueAsString(user2))

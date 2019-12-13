@@ -96,7 +96,6 @@ class UserServiceImplTest {
         assertEquals(manyUsers, mockUserServiceImpl.getAllUsers());
     }
 
-
     /**
      * Test deleting one user by id
      */

@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends MongoRepository<Message, String> {
 
+
     //INTERFACE METHOD TO GET ALL INCOMING MESSAGES VIA USER ID
     List<Message> findAllByReceiver_Id(String users);
 
