@@ -30,7 +30,7 @@ class UserServiceImplTest {
     @Mock
     UserRepository mockUserRepository;
 
-    /**
+    /** 
      * Test adding one user
      */
     @Test
