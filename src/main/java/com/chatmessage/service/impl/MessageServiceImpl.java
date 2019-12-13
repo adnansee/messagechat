@@ -112,13 +112,15 @@ public class MessageServiceImpl implements MessageService {
                 }
             }
         }
-
-        for (Message message1 : messages
-        ) {
-            if (message.getId().equals(message1.getId())) {
-                message.setId(message.getId() + "+");
+        if (messages.size() > 0) {
+            for (Message message1 : messages
+            ) {
+                if (message.getId()!=null) {
+                    if (message.getId().equals(message1.getId())) {
+                        message.setId(message.getId() + "+");
+                    }
+                }
             }
-
         }
         message.setLocalDateTime(LocalDateTime.now());
 
