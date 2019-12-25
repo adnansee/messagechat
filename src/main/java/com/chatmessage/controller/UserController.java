@@ -24,7 +24,7 @@ public class UserController {
     private UserService userService;
 
     //GET SINGLE USER BY ID
-    @RequestMapping(method = RequestMethod.GET, value = "/getuser/{user_id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{user_id}")
     public ResponseEntity<Users> getUsersById(@PathVariable("user_id") String user_id) {
         Users users = userService.findUserById(user_id);
         return new ResponseEntity<>(users, HttpStatus.OK);

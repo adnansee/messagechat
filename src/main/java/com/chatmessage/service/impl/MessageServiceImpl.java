@@ -1,9 +1,8 @@
 package com.chatmessage.service.impl;
 
+import com.chatmessage.exceptions.ReceiverNotFoundException;
 import com.chatmessage.model.Message;
-import com.chatmessage.model.Users;
 import com.chatmessage.repository.MessageRepository;
-import com.chatmessage.repository.UserRepository;
 import com.chatmessage.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +30,6 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     MessageRepository messageRepository;
 
-    @Autowired
-    UserRepository userRepository;
-
 
     /**
      * SEND SINGLE MESSAGE
@@ -51,10 +47,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message sendSingleMessage(Message message) {
-        userNameCheck(message);
+        checkMessage(message);
         messageRepository.save(message);
         return message;
     }
+
+
 
 
     /**
@@ -70,60 +68,32 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> sendMultipleMessage(List<Message> messages) {
         for (Message message : messages) {
-            userNameCheck(message);
+            checkMessage(message);
         }
         messageRepository.saveAll(messages);
         return messages;
     }
 
-    private void userNameCheck(Message message) {
-        List<Users> allUsers = userRepository.findAll();
-        Users receiver = message.getReceiver();
-        Users sender = message.getSender();
+    private void checkMessage(Message message) {
 
         List<Message> messages = messageRepository.findAll();
 
+        if (message.getReceiver() == null) {
+            throw new ReceiverNotFoundException();
 
-        if (receiver != null && receiver.getId() != null) {
-            for (Users user : allUsers) {
-                if (receiver.getId().equals(user.getId())) {
-                    message.setReceiver(user);
-                }
-            }
-        }
-        if (receiver != null && receiver.getName() != null) {
-            for (Users user : allUsers) {
-                if (receiver.getName().equals(user.getName())) {
-                    message.setReceiver(user);
-                }
-            }
-        }
-        if (sender != null && sender.getId() != null) {
-            for (Users user : allUsers) {
-                if (sender.getId().equals(user.getId())) {
-                    message.setSender(user);
-                }
-            }
-        }
-        if (sender != null && sender.getName() != null) {
-            for (Users user : allUsers) {
-                if (sender.getName().equals(user.getName())) {
-                    message.setReceiver(user);
-                }
-            }
-        }
-        if (messages.size() > 0) {
-            for (Message message1 : messages
-            ) {
-                if (message.getId()!=null) {
-                    if (message.getId().equals(message1.getId())) {
-                        message.setId(message.getId() + "+");
+        } else {
+            if (messages.size() > 0) {
+                for (Message message1 : messages
+                ) {
+                    if (message.getId() != null) {
+                        if (message.getId().equals(message1.getId())) {
+                            message.setId(message.getId() + " +");
+                        }
                     }
                 }
             }
         }
         message.setLocalDateTime(LocalDateTime.now());
-
     }
 
     /**

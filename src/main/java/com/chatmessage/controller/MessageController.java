@@ -39,21 +39,21 @@ public class MessageController {
     }
 
     //READ ALL RECIEVED MESSAGES
-    @RequestMapping(method = RequestMethod.GET, value = "read/myrecieved/{users}")
+    @RequestMapping(method = RequestMethod.GET, value = "read/recieved/{users}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable("users") String users) {
         List<Message> messages = messageService.getAllReceivedMessages(users);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
     //READ ALL SENT MESSAGES
-    @RequestMapping(method = RequestMethod.GET, value = "read/mysent/{users}")
+    @RequestMapping(method = RequestMethod.GET, value = "read/sent/{users}")
     public ResponseEntity<List<Message>> readSentMessages(@PathVariable("users") String users) {
         List<Message> messages = messageService.getAllSentMessages(users);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
     //READ MESSAGE CONTENT
-    @RequestMapping(method = RequestMethod.GET, value = "/read/mymessage/{message}")
+    @RequestMapping(method = RequestMethod.GET, value = "/read/{message}")
     @ResponseBody
     public ResponseEntity<String> readMessagesById(@PathVariable("message") String message_id) {
         String msgContent = messageService.readMyMessage(message_id);
@@ -82,10 +82,9 @@ public class MessageController {
     }
 
     //SHOW ALL MESSAGES
-    @RequestMapping(method = RequestMethod.GET, value = "/showallmessages")
+    @RequestMapping(method = RequestMethod.GET, value = "/getall")
     public ResponseEntity<List<Message>> showAllMessages() {
         List<Message> messages = messageService.showAllMessages();
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
-
 }
