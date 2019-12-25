@@ -18,8 +18,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setTimeStamp(LocalDateTime.now());
         errorResponse.setError(ex.getMessage());
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
-
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 
+
+
+    @ExceptionHandler(MessageNotFoundException.class)
+    public ResponseEntity<NoMessageErrorResponse> messageNotFound(Exception ex) {
+        NoMessageErrorResponse errorResponse = new NoMessageErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setError(ex.getMessage());
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 }

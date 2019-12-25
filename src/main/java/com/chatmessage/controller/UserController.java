@@ -2,7 +2,7 @@ package com.chatmessage.controller;
 
 import com.chatmessage.model.Users;
 import com.chatmessage.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +20,11 @@ import java.util.List;
 @CrossOrigin("*")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     //GET SINGLE USER BY ID
     @RequestMapping(method = RequestMethod.GET, value = "/{user_id}")

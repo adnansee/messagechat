@@ -15,8 +15,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /** SHOW ALL USERS ADDED
      * This methos shows all users that are present in the MonngoDB
@@ -28,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     /** ADD ONE USER TO THE DATABASE
      * This method adds a user to the MongoDB
-     * @param {User}
+     * @param {User} user
      *
      */
     @Override

@@ -2,7 +2,7 @@ package com.chatmessage.controller;
 
 import com.chatmessage.model.Message;
 import com.chatmessage.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,11 @@ import java.util.List;
 @CrossOrigin("*")
 public class MessageController {
 
-    @Autowired
-    private MessageService messageService;
+    private final MessageService messageService;
+
+    public MessageController(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     //SEND SINGLE MESSAGE
     @RequestMapping(method = RequestMethod.POST, value = "/sendmsg")
@@ -38,7 +41,7 @@ public class MessageController {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    //READ ALL RECIEVED MESSAGES
+    //READ ALL RECEIVED MESSAGES
     @RequestMapping(method = RequestMethod.GET, value = "/recieved/{users_id}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable("users_id") String users_id) {
         List<Message> messages = messageService.getAllReceivedMessages(users_id);

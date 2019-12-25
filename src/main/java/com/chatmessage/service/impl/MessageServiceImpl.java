@@ -1,5 +1,6 @@
 package com.chatmessage.service.impl;
 
+import com.chatmessage.exceptions.MessageNotFoundException;
 import com.chatmessage.exceptions.NoReceiverErrorResponse;
 import com.chatmessage.exceptions.ReceiverNotFoundException;
 import com.chatmessage.model.Message;
@@ -26,10 +27,11 @@ public class MessageServiceImpl implements MessageService {
     static final int constantSecondsInDay = 86400;
     static final int constantSecondsInWeek = 604800;
     private static DecimalFormat df = new DecimalFormat("0.00");
+    final MessageRepository messageRepository;
 
-
-    @Autowired
-    MessageRepository messageRepository;
+    public MessageServiceImpl(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
+    }
 
 
     /**
@@ -52,8 +54,6 @@ public class MessageServiceImpl implements MessageService {
         messageRepository.save(message);
         return message;
     }
-
-
 
 
     /**
@@ -131,18 +131,29 @@ public class MessageServiceImpl implements MessageService {
      * @param {String} message id
      * @return {String} message content
      */
-    @Override
-    public String readMyMessage(String message_id) {
+
+    public String readMyMessage1(String message_id) {
         List<Message> messages = messageRepository.findAll();
-        String answer = "Message does not exist";
+        String messageContent = "";
         for (Message message1 : messages
         ) {
             if (message1.getId().equals(message_id)) {
-                answer = messageRepository.findMessageById(message_id).getContent();
+                messageContent = messageRepository.findMessageById(message_id).getContent();
             }
         }
-        return answer;
+
+        return messageContent;
     }
+
+    @Override
+    public String readMyMessage(String message_id) {
+    String messegeContent;
+
+    Message message = messageRepository.findById(message_id).orElseThrow(MessageNotFoundException::new);
+    messegeContent = message.getContent();
+    return messegeContent;
+    }
+
 
 
     /**
@@ -196,7 +207,7 @@ public class MessageServiceImpl implements MessageService {
      * This method deletes all messages in the MongoDB.
      *
      * @param
-     * @return {Http status code}
+     * 
      */
 
     public void deleteAllMessages() {
