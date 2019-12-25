@@ -1,5 +1,6 @@
 package com.chatmessage.service.impl;
 
+import com.chatmessage.exceptions.NoReceiverErrorResponse;
 import com.chatmessage.exceptions.ReceiverNotFoundException;
 import com.chatmessage.model.Message;
 import com.chatmessage.repository.MessageRepository;

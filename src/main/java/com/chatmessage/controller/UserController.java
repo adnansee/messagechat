@@ -31,7 +31,7 @@ public class UserController {
     }
 
     //GET ALL USERS
-    @RequestMapping(method = RequestMethod.GET, value = "/getallusers")
+    @RequestMapping(method = RequestMethod.GET, value = "/getall")
     public ResponseEntity<List<Users>> getAllUsers() {
         List<Users> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -52,14 +52,14 @@ public class UserController {
     }
 
     //DELETE ALL USERS
-    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteallusers")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteall")
     public ResponseEntity<Void> deleteAllUsers() {
         userService.deleteAllUsers();
         return new ResponseEntity<>(HttpStatus.GONE);
     }
 
     //DELETE SINGLE USER BY ID
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{user_id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{user_id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable("user_id") String user) {
         userService.deleteUserById(user);
         return new ResponseEntity<>(HttpStatus.GONE);

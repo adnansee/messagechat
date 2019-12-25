@@ -39,23 +39,23 @@ public class MessageController {
     }
 
     //READ ALL RECIEVED MESSAGES
-    @RequestMapping(method = RequestMethod.GET, value = "read/recieved/{users}")
-    public ResponseEntity<List<Message>> getAllMessages(@PathVariable("users") String users) {
-        List<Message> messages = messageService.getAllReceivedMessages(users);
+    @RequestMapping(method = RequestMethod.GET, value = "/recieved/{users_id}")
+    public ResponseEntity<List<Message>> getAllMessages(@PathVariable("users_id") String users_id) {
+        List<Message> messages = messageService.getAllReceivedMessages(users_id);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
     //READ ALL SENT MESSAGES
-    @RequestMapping(method = RequestMethod.GET, value = "read/sent/{users}")
-    public ResponseEntity<List<Message>> readSentMessages(@PathVariable("users") String users) {
-        List<Message> messages = messageService.getAllSentMessages(users);
+    @RequestMapping(method = RequestMethod.GET, value = "/sent/{users_id}")
+    public ResponseEntity<List<Message>> readSentMessages(@PathVariable("users_id") String users_id) {
+        List<Message> messages = messageService.getAllSentMessages(users_id);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
     //READ MESSAGE CONTENT
-    @RequestMapping(method = RequestMethod.GET, value = "/read/{message}")
+    @RequestMapping(method = RequestMethod.GET, value = "/read/{message_id}")
     @ResponseBody
-    public ResponseEntity<String> readMessagesById(@PathVariable("message") String message_id) {
+    public ResponseEntity<String> readMessagesById(@PathVariable("message_id") String message_id) {
         String msgContent = messageService.readMyMessage(message_id);
         return new ResponseEntity<>(msgContent, HttpStatus.OK);
     }
@@ -75,7 +75,7 @@ public class MessageController {
     }
 
     //DELETE ALL MESSAGES
-    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteallmessages")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteall")
     public ResponseEntity<Void> deleteAllMessages() {
         messageService.deleteAllMessages();
         return new ResponseEntity<>(HttpStatus.GONE);
