@@ -1,12 +1,10 @@
 package com.chatmessage.service.impl;
 
 import com.chatmessage.exceptions.MessageNotFoundException;
-import com.chatmessage.exceptions.ReceiverNotFoundException;
+import com.chatmessage.exceptions.ReceiverNotAddedException;
 import com.chatmessage.model.Message;
 import com.chatmessage.model.Users;
 import com.chatmessage.repository.MessageRepository;
-import com.chatmessage.repository.UserRepository;
-import com.mongodb.util.JSON;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -326,7 +324,7 @@ class MessageServiceImplTest {
         try {
             mockMessageServiceImpl.sendSingleMessage(message);
             fail();
-        } catch (ReceiverNotFoundException ex) {
+        } catch (ReceiverNotAddedException ex) {
             assertEquals(ex.getMessage(), "Receiver not named");
 
         }

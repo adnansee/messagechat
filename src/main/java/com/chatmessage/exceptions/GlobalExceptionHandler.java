@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
-   @ExceptionHandler(ReceiverNotFoundException.class)
+   @ExceptionHandler(ReceiverNotAddedException.class)
     public ResponseEntity<NoReceiverErrorResponse> receiverNotFound(Exception ex) {
         NoReceiverErrorResponse errorResponse = new NoReceiverErrorResponse();
         errorResponse.setTimeStamp(LocalDateTime.now());

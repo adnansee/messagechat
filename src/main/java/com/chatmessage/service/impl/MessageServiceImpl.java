@@ -1,12 +1,10 @@
 package com.chatmessage.service.impl;
 
 import com.chatmessage.exceptions.MessageNotFoundException;
-import com.chatmessage.exceptions.NoReceiverErrorResponse;
-import com.chatmessage.exceptions.ReceiverNotFoundException;
+import com.chatmessage.exceptions.ReceiverNotAddedException;
 import com.chatmessage.model.Message;
 import com.chatmessage.repository.MessageRepository;
 import com.chatmessage.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -80,7 +78,7 @@ public class MessageServiceImpl implements MessageService {
         List<Message> messages = messageRepository.findAll();
 
         if (message.getReceiver() == null) {
-            throw new ReceiverNotFoundException();
+            throw new ReceiverNotAddedException();
 
         } else {
             if (messages.size() > 0) {
