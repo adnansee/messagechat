@@ -95,7 +95,7 @@ class UserControllerTest {
         users.add(user1);
         Mockito.when(mockUserService.getAllUsers()).thenReturn(users);
 
-        mockMvc.perform(get("/users/getallusers"))
+        mockMvc.perform(get("/users/getall"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -142,7 +142,7 @@ class UserControllerTest {
 
         doNothing().when(mockUserService).deleteUserById(user2.getId());
 
-        mockMvc.perform(delete("/users/delete/" + user2.getId()))
+        mockMvc.perform(delete("/users/" + user2.getId()))
                 .andExpect(status().isGone());
         verifyNoInteractions(mockUserRepository);
         verify(mockUserService, times(1)).deleteUserById(user2.getId());
@@ -162,7 +162,7 @@ class UserControllerTest {
 
         doNothing().when(mockUserService).deleteAllUsers();
 
-        mockMvc.perform(delete("/users/deleteallusers/"))
+        mockMvc.perform(delete("/users/deleteall"))
                 .andExpect(status().isGone());
         verifyNoInteractions(mockUserRepository);
         verify(mockUserService, times(1)).deleteAllUsers();
@@ -182,7 +182,7 @@ class UserControllerTest {
 
         Mockito.when(mockUserService.findUserById(user2.getId())).thenReturn(user2);
 
-        mockMvc.perform(get("/users/getuser/" + user2.getId()))
+        mockMvc.perform(get("/users/" + user2.getId()))
                 .andExpect(jsonPath("$.id", is("101")))
                 .andExpect(jsonPath("$.name", is("Baby")))
                 .andExpect(status().isOk());

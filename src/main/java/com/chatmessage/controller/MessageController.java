@@ -2,11 +2,9 @@ package com.chatmessage.controller;
 
 import com.chatmessage.model.Message;
 import com.chatmessage.service.MessageService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
@@ -42,7 +40,7 @@ public class MessageController {
     }
 
     //READ ALL RECEIVED MESSAGES
-    @RequestMapping(method = RequestMethod.GET, value = "/recieved/{users_id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/received/{users_id}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable("users_id") String users_id) {
         List<Message> messages = messageService.getAllReceivedMessages(users_id);
         return new ResponseEntity<>(messages, HttpStatus.OK);

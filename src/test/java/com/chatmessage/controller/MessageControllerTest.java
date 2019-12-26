@@ -14,22 +14,26 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
+
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import java.util.ArrayList;
 
 /**
@@ -68,7 +72,7 @@ class MessageControllerTest {
      */
     @Test
     void getAllMessagesConnection() throws Exception {
-        mockMvc.perform(get("/messages/showallmessages"))
+        mockMvc.perform(get("/messages/getall"))
                 .andExpect(status().isOk());
         verifyNoInteractions(mockMessageRepository);
     }
@@ -167,7 +171,7 @@ class MessageControllerTest {
 
         Mockito.when(mockMessageService.readMyMessage(message1.getId())).thenReturn(message1.getContent());
 
-        mockMvc.perform(get("/messages/read/mymessage/" + message1.getId()))
+        mockMvc.perform(get("/messages/read/" + message1.getId()))
                 .andExpect(content().string(message1.getContent()))
                 .andExpect(status().isOk());
         verifyNoInteractions(mockMessageRepository);
@@ -204,7 +208,7 @@ class MessageControllerTest {
         messages.add(message);
         Mockito.when(mockMessageService.getAllReceivedMessages(user1.getId())).thenReturn(messages);
 
-        mockMvc.perform(get("/messages/read/myrecieved/" + user1.getId()))
+        mockMvc.perform(get("/messages/received/" + user1.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -246,7 +250,7 @@ class MessageControllerTest {
         messages.add(message);
         Mockito.when(mockMessageService.getAllSentMessages(user2.getId())).thenReturn(messages);
 
-        mockMvc.perform(get("/messages/read/mysent/" + user2.getId()))
+        mockMvc.perform(get("/messages/sent/" + user2.getId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -331,7 +335,7 @@ class MessageControllerTest {
 
         doNothing().when(mockMessageService).deleteAllMessages();
 
-        mockMvc.perform(delete("/messages/deleteallmessages"))
+        mockMvc.perform(delete("/messages/deleteall"))
                 .andExpect(status().isGone());
         verifyNoInteractions(mockMessageRepository);
         verify(mockMessageService, times(1)).deleteAllMessages();
@@ -361,11 +365,12 @@ class MessageControllerTest {
 
         Mockito.when(mockMessageService.showAllMessages()).thenReturn(messages);
 
-        mockMvc.perform(get("/messages/showallmessages"))
+        mockMvc.perform(get("/messages/getall"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
         verifyNoInteractions(mockMessageRepository);
     }
+
 
 }

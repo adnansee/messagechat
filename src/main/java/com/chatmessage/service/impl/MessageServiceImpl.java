@@ -132,26 +132,14 @@ public class MessageServiceImpl implements MessageService {
      * @return {String} message content
      */
 
-    public String readMyMessage1(String message_id) {
-        List<Message> messages = messageRepository.findAll();
-        String messageContent = "";
-        for (Message message1 : messages
-        ) {
-            if (message1.getId().equals(message_id)) {
-                messageContent = messageRepository.findMessageById(message_id).getContent();
-            }
-        }
-
-        return messageContent;
-    }
 
     @Override
     public String readMyMessage(String message_id) {
-    String messegeContent;
+    String messageContent;
 
     Message message = messageRepository.findById(message_id).orElseThrow(MessageNotFoundException::new);
-    messegeContent = message.getContent();
-    return messegeContent;
+    messageContent = message.getContent();
+    return messageContent;
     }
 
 
@@ -207,7 +195,7 @@ public class MessageServiceImpl implements MessageService {
      * This method deletes all messages in the MongoDB.
      *
      * @param
-     * 
+     *
      */
 
     public void deleteAllMessages() {
