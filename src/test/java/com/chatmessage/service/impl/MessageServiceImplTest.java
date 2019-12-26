@@ -114,8 +114,7 @@ class MessageServiceImplTest {
 
         List<Message> messages = new ArrayList<>();
         messages.add(message);
-        List<Message> messages1 = new ArrayList<>();
-        messages1.add(message1);
+
 
         Mockito.when(mockMessageRepository.findAllByReceiver_Id(user1.getId())).thenReturn(messages);
         assertEquals(messages, mockMessageServiceImpl.getAllReceivedMessages(user1.getId()));
@@ -153,8 +152,6 @@ class MessageServiceImplTest {
 
         List<Message> messages = new ArrayList<>();
         messages.add(message);
-        List<Message> messages1 = new ArrayList<>();
-        messages1.add(message1);
 
         Mockito.when(mockMessageRepository.findAllBySender_Id(user2.getId())).thenReturn(messages);
         assertEquals(messages, mockMessageServiceImpl.getAllSentMessages(user2.getId()));
