@@ -1,10 +1,7 @@
-FROM ubuntu:18.04
+FROM openjdk:11
 
 COPY ./build/libs/* ./messagechat-0.0.1-SNAPSHOT.jar
 
-RUN apt-get update && \
-    apt-get install -y curl \
-    wget \
-    openjdk-11-jdk
+EXPOSE 8080
 
-CMD ["java", "-jar", "messagechat-0.0.1-SNAPSHOT.jar"]
+CMD ["java","-Dspring.data.mongodb.uri=mongodb://mongo:27017/m2", "-jar", "messagechat-0.0.1-SNAPSHOT.jar"]
