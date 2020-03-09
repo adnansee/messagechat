@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: messageappconfig
+data:
+  application.yml: |-
+    spring.data.mongodb.host:mongo
+    spring.data.mongodb.port:27017
+    spring.data.mongodb.database:m2
+    server.port:8080 

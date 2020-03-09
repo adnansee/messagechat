@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: messageapp
+  labels:
+    app: messageapp
+spec:
+  containers:
+  - image: adnansee/messagek
+    name: messagek
+    ports:  
+    - containerPort: 8080
+      protocol: TCP
+    envFrom:
+      - configMapRef: 
+          name: messageappconfig

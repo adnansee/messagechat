@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: messageapp
+  labels:
+    app: messageapp
+spec:
+  containers:
+  - image: adnansee/messagek
+    name: messagek
+    ports:  
+    - containerPort: 8080
+      protocol: TCP
+    env:
+    - name: spring.data.mongodb.host
+      value: "mongo"
+    - name: spring.data.mongodb.port
+      value: "27017"
+    - name: spring.data.mongodb.database
+      value: "m2"
