@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messageapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messageapp
+  template:
+    metadata:
+      labels:
+        app: messageapp
+    spec:
+      containers:
+        - name: messagek
+          image: adnansee/messagek
+          ports:
+            - name: messageappport
+              containerPort: 8080
+              protocol: TCP
+          envFrom:
+          - configMapRef: 
+              name: messageappconfig
